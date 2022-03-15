@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhsj.business.student.mapper.StudentMapper">
+    <resultMap type="com.zhsj.business.student.dto.StudentDto" id="StudentResult">
+<!--        <result property="id"    column="id"    />-->
+<!--        <result property="studentCode"    column="student_code"    />-->
+        <result property="studentName"    column="student_name"    />
+        <result property="studentNo"    column="student_no"    />
+        <result property="studentClass"    column="student_class"    />
+        <result property="studentGroup"    column="student_group"    />
+        <result property="id" column="sid"/>
+<!--        <result property="createBy"    column="create_by"    />-->
+<!--        <result property="createTime"    column="create_time"    />-->
+<!--        <result property="updateBy"    column="update_by"    />-->
+<!--        <result property="updateTime"    column="update_time"    />-->
+    </resultMap>
+    <select id="listStudent" parameterType="com.zhsj.business.student.dto.StudentQueryDto" resultMap="StudentResult">
+        SELECT
+        s.id sid,
+        student_no,
+        student_name,
+        student_group,
+        c.class_name student_class
+        FROM
+        business_student s
+        LEFT JOIN business_class c ON s.student_class = c.class_code
+        <where>
+            <if test="studentName != null  and studentName != ''"> and student_name like concat('%', #{studentName}, '%')</if>
+            <if test="studentNo != null "> and student_no = #{studentNo}</if>
+            <if test="studentGroup != null "> and student_group = #{studentGroup}</if>
+        </where>
+    </select>
+    <resultMap type="StudentPO" id="StudentPOResult">
+        <result property="id"    column="id"    />
+        <result property="studentCode"    column="student_code"    />
+        <result property="studentName"    column="student_name"    />
+        <result property="studentNo"    column="student_no"    />
+        <result property="studentClass"    column="student_class"    />
+        <result property="studentGroup"    column="student_group"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+    <select id="getStudentById" parameterType="Integer" resultMap="StudentPOResult">
+        select * from business_student
+        where id = #{id}
+    </select>
+    <insert id="addStudent" parameterType="StudentPO" useGeneratedKeys="true" keyProperty="id">
+        insert into business_student
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentCode != null">student_code,</if>
+            <if test="studentName != null">student_name,</if>
+            <if test="studentNo != null">student_no,</if>
+            <if test="studentClass != null">student_class,</if>
+            <if test="studentGroup != null">student_group,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentCode != null">#{studentCode},</if>
+            <if test="studentName != null">#{studentName},</if>
+            <if test="studentNo != null">#{studentNo},</if>
+            <if test="studentClass != null">#{studentClass},</if>
+            <if test="studentGroup != null">#{studentGroup},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateStudent" parameterType="StudentPO">
+        update business_student
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentCode != null">student_code = #{studentCode},</if>
+            <if test="studentName != null">student_name = #{studentName},</if>
+            <if test="studentNo != null">student_no = #{studentNo},</if>
+            <if test="studentClass != null">student_class = #{studentClass},</if>
+            <if test="studentGroup != null">student_group = #{studentGroup},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+</mapper>

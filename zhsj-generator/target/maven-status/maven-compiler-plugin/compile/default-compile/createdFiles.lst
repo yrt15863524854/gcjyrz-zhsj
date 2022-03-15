@@ -1,0 +1,13 @@
+com\zhsj\generator\config\GenConfig.class
+com\zhsj\generator\domain\GenTableColumn.class
+com\zhsj\generator\mapper\GenTableMapper.class
+com\zhsj\generator\service\IGenTableColumnService.class
+com\zhsj\generator\util\VelocityUtils.class
+com\zhsj\generator\util\VelocityInitializer.class
+com\zhsj\generator\domain\GenTable.class
+com\zhsj\generator\service\GenTableServiceImpl.class
+com\zhsj\generator\service\GenTableColumnServiceImpl.class
+com\zhsj\generator\mapper\GenTableColumnMapper.class
+com\zhsj\generator\service\IGenTableService.class
+com\zhsj\generator\util\GenUtils.class
+com\zhsj\generator\controller\GenController.class

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="zhsj-common" />
+        <module name="zhsj-framework" />
+        <module name="zhsj-business" />
+        <module name="zhsj-quartz" />
+        <module name="zhsj-generator" />
+        <module name="zhsj-system" />
+        <module name="zhsj-admin" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="gcjyrz-zhsj-common" target="1.5" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

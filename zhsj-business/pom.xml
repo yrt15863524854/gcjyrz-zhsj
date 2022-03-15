@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>gcjyrz-zhsj</artifactId>
+        <groupId>com.zhsj</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>zhsj-business</artifactId>
+
+    <dependencies>
+        <!-- 核心模块-->
+        <dependency>
+            <groupId>com.zhsj</groupId>
+            <artifactId>zhsj-framework</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <!--mybatis-plus-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>3.5.1</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jsqlparser</artifactId>
+                    <groupId>com.github.jsqlparser</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.jodconverter</groupId>-->
+<!--            <artifactId>jodconverter-spring-boot-starter</artifactId>-->
+<!--            <version>4.2.0</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.jodconverter</groupId>-->
+<!--            <artifactId>jodconverter-core</artifactId>-->
+<!--            <version>4.2.0</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.jodconverter</groupId>-->
+<!--            <artifactId>jodconverter-local</artifactId>-->
+<!--            <version>4.2.0</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.libreoffice</groupId>-->
+<!--            <artifactId>ridl</artifactId>-->
+<!--            <version>5.4.2</version>-->
+<!--        </dependency>-->
+    </dependencies>
+
+
+</project>

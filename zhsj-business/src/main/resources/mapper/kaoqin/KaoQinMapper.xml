@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhsj.business.kaoqin.mapper.KaoQinMapper">
+    <insert id="addKaoQinInfo" parameterType="com.zhsj.business.kaoqin.domain.KaoQinPO" useGeneratedKeys="true" keyProperty="id">
+        INSERT business_kaoqin
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="kaoQinPO.kaoqinStudent != null">kaoqin_student,</if>
+            <if test="kaoQinPO.kaoqinStatus != null">kaoqin_status,</if>
+            <if test="kaoQinPO.kaoqinInfo != null">kaoqin_info,</if>
+            <if test="kaoQinPO.studentNo != null">student_no,</if>
+            <if test="kaoQinPO.classCode != null">class_code,</if>
+            <if test="kaoQinPO.createBy != null">create_by,</if>
+            <if test="kaoQinPO.createTime != null">create_time,</if>
+            <if test="kaoQinPO.updateBy != null">update_by,</if>
+            <if test="kaoQinPO.updateTime != null">update_time,</if>
+        </trim>
+       <trim prefix="values (" suffix=")" suffixOverrides=",">
+           <if test="kaoQinPO.kaoqinStudent != null">#{kaoQinPO.kaoqinStudent},</if>
+           <if test="kaoQinPO.kaoqinStatus != null">#{kaoQinPO.kaoqinStatus},</if>
+           <if test="kaoQinPO.kaoqinInfo != null">#{kaoQinPO.kaoqinInfo},</if>
+           <if test="kaoQinPO.studentNo != null">#{kaoQinPO.studentNo},</if>
+           <if test="kaoQinPO.classCode != null">#{kaoQinPO.classCode},</if>
+           <if test="kaoQinPO.createBy != null">#{kaoQinPO.createBy},</if>
+           <if test="kaoQinPO.createTime != null">#{kaoQinPO.createTime},</if>
+           <if test="kaoQinPO.updateBy != null">#{kaoQinPO.updateBy},</if>
+           <if test="kaoQinPO.updateTime != null">#{kaoQinPO.updateTime},</if>
+       </trim>
+    </insert>
+
+    <resultMap id="kaoQinMap" type="com.zhsj.business.kaoqin.dto.KaoQinDto">
+        <result column="class_name" property="className"/>
+        <result column="student_no" property="studentNo"/>
+        <result column="kaoqin_student" property="kaoqinStudent"/>
+        <result column="kaoqin_status" property="kaoqinStatus"/>
+        <result column="create_time" property="kaoqinTime"/>
+    </resultMap>
+
+    <select id="listKaoQinInfo" parameterType="com.zhsj.business.kaoqin.dto.KaoQinQueryDto" resultMap="kaoQinMap">
+        select bc.class_name,bk.student_no,bk.kaoqin_student,bk.kaoqin_status,bk.create_time
+        from business_kaoqin bk left join business_class bc on bk.class_code = bc.class_code
+        <where>
+            <if test="dto.classCode != null and dto.classCode != ''">and bk.class_code = #{dto.classCode}</if>
+            <if test="dto.studentNo != null and dto.studentNo != ''">and bk.student_no like concat('%', #{dto.studentNo}, '%')</if>
+            <if test="dto.kaoqinStudent != null and dto.kaoqinStudent != ''">and bk.kaoqin_student like concat('%', #{dto.kaoqinStudent}, '%')</if>
+            <if test="dto.startTime != null and dto.endTime != null">and bk.create_time &gt;= #{dto.startTime} and bk.create_time &lt;= #{dto.endTime}</if>
+            <if test="dto.status != null and dto.status != ''">and bk.kaoqin_status = #{dto.status}</if>
+        </where>
+    </select>
+</mapper>

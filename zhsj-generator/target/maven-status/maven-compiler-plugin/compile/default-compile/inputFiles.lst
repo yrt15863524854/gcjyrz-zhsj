@@ -1,0 +1,13 @@
+D:\bysj\gcjyrz-zhsj\zhsj-generator\src\main\java\com\zhsj\generator\controller\GenController.java
+D:\bysj\gcjyrz-zhsj\zhsj-generator\src\main\java\com\zhsj\generator\mapper\GenTableMapper.java
+D:\bysj\gcjyrz-zhsj\zhsj-generator\src\main\java\com\zhsj\generator\util\GenUtils.java
+D:\bysj\gcjyrz-zhsj\zhsj-generator\src\main\java\com\zhsj\generator\service\IGenTableColumnService.java
+D:\bysj\gcjyrz-zhsj\zhsj-generator\src\main\java\com\zhsj\generator\service\GenTableColumnServiceImpl.java
+D:\bysj\gcjyrz-zhsj\zhsj-generator\src\main\java\com\zhsj\generator\mapper\GenTableColumnMapper.java
+D:\bysj\gcjyrz-zhsj\zhsj-generator\src\main\java\com\zhsj\generator\service\GenTableServiceImpl.java
+D:\bysj\gcjyrz-zhsj\zhsj-generator\src\main\java\com\zhsj\generator\service\IGenTableService.java
+D:\bysj\gcjyrz-zhsj\zhsj-generator\src\main\java\com\zhsj\generator\config\GenConfig.java
+D:\bysj\gcjyrz-zhsj\zhsj-generator\src\main\java\com\zhsj\generator\util\VelocityInitializer.java
+D:\bysj\gcjyrz-zhsj\zhsj-generator\src\main\java\com\zhsj\generator\domain\GenTable.java
+D:\bysj\gcjyrz-zhsj\zhsj-generator\src\main\java\com\zhsj\generator\util\VelocityUtils.java
+D:\bysj\gcjyrz-zhsj\zhsj-generator\src\main\java\com\zhsj\generator\domain\GenTableColumn.java
