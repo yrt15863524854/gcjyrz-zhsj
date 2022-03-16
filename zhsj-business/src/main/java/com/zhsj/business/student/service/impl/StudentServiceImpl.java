@@ -42,9 +42,6 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, StudentPO> im
     @Resource
     private StudentMapper studentMapper;
 
-    @Resource
-    private ClassInfoMapper classInfoMapper;
-
     @Override
     public List<StudentDto> listStudent(StudentQueryDto studentQueryDto) {
         return studentMapper.listStudent(studentQueryDto);
@@ -105,97 +102,4 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, StudentPO> im
         }
     }
 
-    @Override
-    public AjaxResult importData(MultipartFile file, boolean updateSupport, HttpServletRequest request, HttpServletResponse response) {
-
-        return AjaxResult.success();
-    }
-
-    /**
-     * 学生信息
-     */
-    private List<StudentPO> UpdateExcelBindingContainers(String importFilePath) throws Exception{
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        File file = new File(importFilePath);
-        InputStream inputStream = new FileInputStream(file);
-        Workbook workbook = WorkbookFactory.create(inputStream);
-        Sheet sheet = workbook.getSheetAt(0);
-        Row currentRow;
-        List<StudentPO> list = new ArrayList<>();
-        if (sheet.getLastRowNum() == 0) {
-            throw new RuntimeException("Excel没有数据");
-        }
-        for (int i = 1; i<= sheet.getLastRowNum(); i++){
-            StudentPO detail = new StudentPO();
-            currentRow = sheet.getRow(i);
-            if (currentRow == null) {
-                continue;
-            }
-            //学生编码
-            String studentCode = ImportUtils.getJavaValue(currentRow.getCell(0)).toString();
-            if (studentCode.isEmpty()) {
-                throw new RuntimeException("第" + (i + 1) + "学生编码不能为空");
-            } else {
-                StudentPO code = studentMapper.selectOne(new QueryWrapper<StudentPO>().eq("student_code", studentCode));
-                if (Objects.nonNull(code)) {
-                    throw new RuntimeException("第" + (i + 1) + "行的学生编码信息已存在");
-                }
-                detail.setStudentCode(studentCode);
-            }
-            //学生学号
-            String studentNo = ImportUtils.getJavaValue(currentRow.getCell(1)).toString();
-            if (studentNo.isEmpty()) {
-                throw new RuntimeException("第" + (i + 1) + "学生学号不能为空");
-            } else {
-                StudentPO no = studentMapper.selectOne(new QueryWrapper<StudentPO>().eq("student_no", studentNo));
-                if (Objects.nonNull(no)) {
-                    throw new RuntimeException("第" + (i + 1) + "行学生学号信息已存在");
-                }
-                detail.setStudentNo(Integer.parseInt(studentNo));
-            }
-            //学生姓名
-            String studentName = ImportUtils.getJavaValue(currentRow.getCell(2)).toString();
-            if (studentName.isEmpty()) {
-                throw new RuntimeException("第" + (i + 1) + "学生姓名不能为空");
-            } else {
-                detail.setStudentName(studentName);
-            }
-            //学生班级
-            String studentClass = ImportUtils.getJavaValue(currentRow.getCell(3)).toString();
-            if (studentClass.isEmpty()) {
-                throw new RuntimeException("第" + (i + 1) + "学生班级不能为空");
-            } else {
-                ClassInfoPO code = classInfoMapper.selectOne(new QueryWrapper<ClassInfoPO>().eq("class_code", studentClass));
-                if (Objects.isNull(code)) {
-                    throw new RuntimeException("第" + (i + 1) + "行的班级信息未找到");
-                }
-                detail.setStudentClass(studentClass);
-            }
-            //学生组号
-            String group = ImportUtils.getJavaValue(currentRow.getCell(4)).toString();
-            detail.setStudentGroup(Integer.parseInt(group));
-            //是否为组长
-            String lead = ImportUtils.getJavaValue(currentRow.getCell(5)).toString();
-            detail.setLeader(Integer.parseInt(lead));
-            detail.setCreateBy(SecurityUtils.getUsername());
-            detail.setCreateTime(DateUtils.getNowDate());
-            list.add(detail);
-        }
-        return list;
-    }
-
-    /**
-     * 导入学生信息
-     */
-    private String importVendor(List<StudentPO> detailList) throws Exception{
-        if (StringUtils.isNull(detailList) || detailList.size() == 0) {
-            throw new RuntimeException("导入学生数据不能为空");
-        }
-        StringBuilder successMsg = new StringBuilder();
-        for (StudentPO student: detailList) {
-            student.setCreateBy(SecurityUtils.getLoginUser().getUsername());
-            student.setCreateTime(DateUtils.getNowDate());
-        }
-        return null;
-    }
 }

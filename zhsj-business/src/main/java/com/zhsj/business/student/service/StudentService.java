@@ -5,9 +5,6 @@ import com.zhsj.business.student.domain.StudentPO;
 import com.zhsj.business.student.dto.StudentDto;
 import com.zhsj.business.student.dto.StudentQueryDto;
 import com.zhsj.common.core.domain.AjaxResult;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
@@ -34,8 +31,4 @@ public interface StudentService extends IService<StudentPO> {
      */
     void importTemplate(HttpServletResponse response);
 
-    /**
-     * 导入
-     */
-    AjaxResult importData(MultipartFile file, boolean updateSupport, HttpServletRequest request, HttpServletResponse response);
 }
