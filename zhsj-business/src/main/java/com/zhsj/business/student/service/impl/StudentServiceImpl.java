@@ -2,8 +2,6 @@ package com.zhsj.business.student.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.zhsj.business.kaoqin.domain.ClassInfoPO;
-import com.zhsj.business.kaoqin.mapper.ClassInfoMapper;
 import com.zhsj.business.student.domain.StudentPO;
 import com.zhsj.business.student.dto.StudentDto;
 import com.zhsj.business.student.dto.StudentQueryDto;
@@ -12,27 +10,14 @@ import com.zhsj.business.student.service.StudentService;
 import com.zhsj.common.core.domain.AjaxResult;
 import com.zhsj.common.exception.base.BaseException;
 import com.zhsj.common.utils.DateUtils;
-import com.zhsj.common.utils.ImportUtils;
 import com.zhsj.common.utils.SecurityUtils;
-import com.zhsj.common.utils.StringUtils;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
 import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
