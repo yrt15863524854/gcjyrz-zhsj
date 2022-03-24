@@ -1,20 +1,26 @@
 package com.zhsj.business.manual.controller;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import com.zhsj.business.manual.dto.ManualDto;
+import com.zhsj.business.manual.dto.ManualQueryDto;
+import com.zhsj.business.manual.service.ManualService;
+import com.zhsj.common.core.controller.BaseController;
+import com.zhsj.common.core.page.TableDataInfo;
+import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
+import java.util.List;
 
 @RestController
 @RequestMapping("/business/manual")
-public class ManualController {
+public class ManualController extends BaseController {
 
+    @Resource
+    private ManualService manualService;
 
     @PostMapping("/importTemplate")
     @ResponseBody
@@ -41,6 +47,11 @@ public class ManualController {
             e.printStackTrace();
         }
     }
-
+    @PostMapping("/listManualInfo")
+    public TableDataInfo listManualInfo(@RequestBody ManualQueryDto manualQueryDto) {
+        startPage();
+        List<ManualDto> list = manualService.ListManualInfo(manualQueryDto);
+        return getDataTable(list);
+    }
 
 }
