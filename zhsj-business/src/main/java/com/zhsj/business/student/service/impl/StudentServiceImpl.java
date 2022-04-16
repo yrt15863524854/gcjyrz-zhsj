@@ -8,9 +8,13 @@ import com.zhsj.business.student.dto.StudentQueryDto;
 import com.zhsj.business.student.mapper.StudentMapper;
 import com.zhsj.business.student.service.StudentService;
 import com.zhsj.common.core.domain.AjaxResult;
+import com.zhsj.common.core.domain.entity.SysUser;
 import com.zhsj.common.exception.base.BaseException;
 import com.zhsj.common.utils.DateUtils;
 import com.zhsj.common.utils.SecurityUtils;
+import com.zhsj.system.domain.UserRolePO;
+import com.zhsj.system.service.ISysRoleService;
+import com.zhsj.system.service.ISysUserService;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
@@ -26,6 +30,10 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, StudentPO> im
 
     @Resource
     private StudentMapper studentMapper;
+    @Resource
+    private ISysUserService iSysUserService;
+    @Resource
+    private ISysRoleService iSysRoleService;
 
     @Override
     public List<StudentDto> listStudent(StudentQueryDto studentQueryDto) {
@@ -35,10 +43,23 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, StudentPO> im
     @Override
     public AjaxResult addOrUpdateStudent(StudentPO studentPO) {
         if (Objects.isNull(studentPO.getId())) {
+            SysUser user = new SysUser();
+            UserRolePO userRolePO = new UserRolePO();
             List<StudentPO> list = studentMapper.selectList(new QueryWrapper<StudentPO>().eq("student_code", studentPO.getStudentCode()));
             if (list.size() > 0) {
                 throw new BaseException("该学生编码"+studentPO.getStudentCode()+"已存在");
             }
+            String sno = studentPO.getStudentNo() + "";
+            user.setUserId(Long.parseLong(sno));
+            user.setUserName(sno);
+            userRolePO.setUserId(Long.parseLong(sno));
+            user.setNickName(studentPO.getStudentName());
+            user.setCreateBy(SecurityUtils.getLoginUser().getUsername());
+            user.setPassword(SecurityUtils.encryptPassword("123456"));
+            userRolePO.setRoleId((long)100);
+            iSysUserService.insertUser(user);
+            iSysRoleService.insertUserRole(userRolePO);
+            user.setCreateTime(DateUtils.getNowDate());
             studentPO.setCreateBy(SecurityUtils.getLoginUser().getUsername());
             studentPO.setCreateTime(DateUtils.getNowDate());
             int result = studentMapper.addStudent(studentPO);

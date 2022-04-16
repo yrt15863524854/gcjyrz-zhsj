@@ -2,6 +2,7 @@ package com.zhsj.system.service;
 
 import com.zhsj.common.core.domain.entity.SysRole;
 import com.zhsj.system.domain.SysUserRole;
+import com.zhsj.system.domain.UserRolePO;
 
 import java.util.List;
 import java.util.Set;
@@ -171,4 +172,12 @@ public interface ISysRoleService
      * @return 结果
      */
     public int insertAuthUsers(Long roleId, Long[] userIds);
+    /**
+     * @description 授权用户角色
+     * @date 2022/3/28 23:06
+     * @param
+     * @return
+     * @author yrt
+     **/
+    void insertUserRole(UserRolePO userRolePO);
 }

@@ -2,9 +2,13 @@ package com.zhsj.business.manual.controller;
 
 import com.zhsj.business.manual.dto.ManualDto;
 import com.zhsj.business.manual.dto.ManualQueryDto;
+import com.zhsj.business.manual.dto.TopicDetailDto;
+import com.zhsj.business.manual.dto.TopicDetailQueryDto;
 import com.zhsj.business.manual.service.ManualService;
+import com.zhsj.business.manual.service.TopicDetailService;
 import com.zhsj.common.core.controller.BaseController;
 import com.zhsj.common.core.page.TableDataInfo;
+import com.zhsj.common.utils.SecurityUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -13,7 +17,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/business/manual")
@@ -21,6 +27,9 @@ public class ManualController extends BaseController {
 
     @Resource
     private ManualService manualService;
+
+    @Resource
+    private TopicDetailService topicDetailService;
 
     @PostMapping("/importTemplate")
     @ResponseBody
@@ -53,5 +62,51 @@ public class ManualController extends BaseController {
         List<ManualDto> list = manualService.ListManualInfo(manualQueryDto);
         return getDataTable(list);
     }
-
+    @PostMapping("/getUserInfo")
+    public Map<String, Object> getUserInfo(){
+        Map<String, Object> map = new HashMap<>();
+        String username = SecurityUtils.getLoginUser().getUsername();
+        map.put("username", username);
+        Long userId = SecurityUtils.getLoginUser().getUserId();
+        map.put("userId", userId);
+        return map;
+    }
+    @GetMapping("/getRoleId/{id}")
+    public Map<String, Object> getRoleId(@PathVariable("id")Long userId){
+        Map<String, Object> map = new HashMap<>();
+        Long roleId = manualService.getRoleId(userId);
+        map.put("roleId", roleId);
+        return map;
+    }
+    @PostMapping("/insertManual")
+    public void insertManual(@RequestBody ManualDto dto){
+        manualService.insertManual(dto);
+    }
+    @PostMapping("/updateManual")
+    public void updateManual(@RequestBody ManualDto dto){
+        manualService.updateManual(dto);
+    }
+    @GetMapping("/getStudentGroup/{sno}")
+    public Map<String, Object> getStudentGroup(@PathVariable("sno") String sno){
+        return manualService.getStudentGroup(sno);
+    }
+    @PostMapping("/getManualInfoBySg")
+    public ManualDto getManualInfoBySg(@RequestBody ManualQueryDto dto){
+        return manualService.getManualInfoBySg(dto);
+    }
+    @PostMapping("/getTopicDetail")
+    public Map<String, Object> getTopicDetail(@RequestBody TopicDetailQueryDto dto){
+        Map<String, Object> map = new HashMap<>();
+        TopicDetailDto topicDetail = topicDetailService.getTopicDetail(dto);
+        map.put("topicDetail", topicDetail);
+        return map;
+    }
+    @PostMapping("/insertTopicDetail")
+    public void insertTopicDetail(@RequestBody TopicDetailDto dto){
+        topicDetailService.insertTopicDetail(dto);
+    }
+    @PostMapping("/updateTopicDetail")
+    public void updateTopicDetail(@RequestBody TopicDetailDto dto){
+        topicDetailService.updateTopicDetail(dto);
+    }
 }

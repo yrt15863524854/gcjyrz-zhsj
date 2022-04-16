@@ -10,9 +10,10 @@
         <result column="courseName" property="courseName"/>
         <result column="is_audit" property="isAudit"/>
         <result column="feedback" property="feedback"/>
+        <result column="manual_code" property="manualCode"/>
     </resultMap>
     <select id="listManualInfo" resultMap="manualResult" parameterType="com.zhsj.business.manual.dto.ManualQueryDto">
-        select bm.manual_name,bm.student_group,bm.feedback,bm.is_audit,bc.class_name as className,bc2.course_name as courseName from business_manual bm left join business_class bc
+        select bm.id,bm.manual_code,bm.manual_name,bm.student_group,bm.feedback,bm.is_audit,bc.class_name as className,bc2.course_name as courseName from business_manual bm left join business_class bc
         on bc.class_code = bm.class_code left join business_course bc2 on bc2 .course_code = bm .course_code
         <where>
             bm.course_code =
@@ -22,4 +23,113 @@
             <if test="dto.classCode != null and dto.classCode != ''">and bm.class_code = #{dto.classCode}</if>
         </where>
     </select>
+    <insert id="insertManual" parameterType="com.zhsj.business.manual.domain.ManualPO">
+        insert into business_manual
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="PO != null and PO != ''">
+                id, manual_code,
+                <if test="PO.manualName != null and PO.manualName != ''">
+                    manual_name,
+                </if>
+                <if test="PO.courseCode != null and PO.courseCode != ''">
+                    course_code,
+                </if>
+                <if test="PO.studentGroup != null and PO.studentGroup != ''">
+                    student_group,
+                </if>
+                <if test="PO.feedback != null and PO.feedback != ''">
+                    feedback,
+                </if>
+                <if test="PO.isAudit != null and PO.isAudit != ''">
+                    is_audit,
+                </if>
+                <if test="PO.classCode != null and PO.classCode != ''">
+                    class_code,
+                </if>
+                <if test="PO.createBy != null and PO.createBy != ''">
+                    create_by,
+                </if>
+                <if test="PO.createTime != null">
+                    create_time,
+                </if>
+            </if>
+        </trim>
+        <trim prefix="values (" suffixOverrides="," suffix=")">
+            #{PO.id},#{PO.manualCode},
+            <if test="PO.manualName != null and PO.manualName != ''">
+                #{PO.manualName},
+            </if>
+            <if test="PO.courseCode != null and PO.courseCode != ''">
+                #{PO.courseCode},
+            </if>
+            <if test="PO.studentGroup != null and PO.studentGroup != ''">
+                #{PO.studentGroup},
+            </if>
+            <if test="PO.feedback != null and PO.feedback != ''">
+                #{PO.feedback},
+            </if>
+            <if test="PO.isAudit != null and PO.isAudit != ''">
+                #{PO.isAudit},
+            </if>
+            <if test="PO.classCode != null and PO.classCode != ''">
+                #{PO.classCode},
+            </if>
+            <if test="PO.createBy != null and PO.createBy != ''">
+                #{PO.createBy},
+            </if>
+            <if test="PO.createTime != null">
+                #{PO.createTime},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateManual" parameterType="com.zhsj.business.manual.domain.ManualPO">
+        update business_manual
+        <trim prefix="set" suffixOverrides=",">
+            <if test="PO.manualName != null and PO.manualName != ''">
+                manual_name = #{PO.manualName},
+            </if>
+            <if test="PO.courseCode != null and PO.courseCode != ''">
+                course_code = #{PO.courseCode},
+            </if>
+            <if test="PO.studentGroup != null and PO.studentGroup != ''">
+                student_group = #{PO.studentGroup},
+            </if>
+            <if test="PO.feedback != null and PO.feedback != ''">
+                feedback = #{PO.feedback},
+            </if>
+            <if test="PO.isAudit != null and PO.isAudit != ''">
+                is_audit = #{PO.isAudit},
+            </if>
+            <if test="PO.classCode != null and PO.classCode != ''">
+                class_code = #{PO.classCode},
+            </if>
+            <if test="PO.updateBy != null and PO.updateBy != ''">
+                update_by = #{PO.updateBy},
+            </if>
+            <if test="PO.createTime != null">
+                update_time#{PO.updateTime},
+            </if>
+        </trim>
+        where id = #{PO.id}
+    </update>
+    <select id="getRoleId" parameterType="Long" resultType="Long">
+        select role_id from sys_user_role where user_id = #{id}
+    </select>
+    <select id="getStudentGroup" parameterType="String" resultType="com.zhsj.business.manual.dto.GroupAndClassNameDto">
+        select student_group, class_name
+        from business_student bs
+        left join business_class bc
+        on bs.student_class = bc.class_code
+        where student_no = #{sno}
+    </select>
+    <select id="getManualInfoBySg" parameterType="com.zhsj.business.manual.dto.ManualQueryDto" resultType="com.zhsj.business.manual.dto.ManualDto">
+        select bm.id,bm.manual_code,bm.manual_name,bm.student_group,bm.feedback,bm.is_audit,bc.class_name as className,bc2.course_name as courseName, bm.course_code
+        from business_manual bm
+        left join business_class bc
+        on bc.class_code = (select student_class from business_student where student_no	= #{dto.studentNo})
+        left join business_course bc2
+        on bc2.course_code = bm.course_code
+        where bm.student_group = #{dto.studentGroup}
+    </select>
+
 </mapper>

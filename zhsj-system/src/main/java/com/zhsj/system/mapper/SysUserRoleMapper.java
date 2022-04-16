@@ -1,6 +1,7 @@
 package com.zhsj.system.mapper;
 
 import com.zhsj.system.domain.SysUserRole;
+import com.zhsj.system.domain.UserRolePO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -60,4 +61,6 @@ public interface SysUserRoleMapper
      * @return 结果
      */
     public int deleteUserRoleInfos(@Param("roleId") Long roleId, @Param("userIds") Long[] userIds);
+
+    int insertUserRole(@Param("PO")UserRolePO userRolePO);
 }

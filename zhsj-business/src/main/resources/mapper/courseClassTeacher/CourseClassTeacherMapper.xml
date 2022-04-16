@@ -3,30 +3,102 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhsj.business.courseClassTeacher.mapper.CourseClassTeacherMapper">
-    <insert id="entryInformation" parameterType="com.zhsj.business.courseClassTeacher.dto.CourseClassTeacherDto" useGeneratedKeys="true" keyProperty="id">
+    <insert id="entryInformation" parameterType="com.zhsj.business.courseClassTeacher.domain.CourseClassTeacherPO" useGeneratedKeys="true" keyProperty="id">
         insert into
         business_course_teacher
         <trim prefix="(" suffixOverrides="," suffix=")">
-            <if test="dto.courseCode != null and dto.courseCode != ''">
+            <if test="PO.courseCode != null and PO.courseCode != ''">
                 course_code,
             </if>
-            <if test="dto.classCode != null and dto.classCode != ''">
+            <if test="PO.classCode != null and PO.classCode != ''">
                 class_code,
             </if>
-            <if test="dto.teacherCode != null and dto.teacherCode != ''">
+            <if test="PO.teacherCode != null and PO.teacherCode != ''">
                 teacher_code,
             </if>
+            <if test="PO.createBy != null and PO.createBy != ''">
+                create_by,
+            </if>
+            <if test="PO.createTime != null">
+                create_time,
+            </if>
         </trim>
-        <trim prefix="values (" suffixOverrides="," suffix=",">
-            <if test="dto.courseCode != null and dto.courseCode != ''">
-                #{dto.courseCode}
+        <trim prefix="values (" suffixOverrides="," suffix=")">
+            <if test="PO.courseCode != null and PO.courseCode != ''">
+                #{PO.courseCode},
             </if>
-            <if test="dto.classCode != null and dto.classCode != ''">
-                #{dto.classCode}
+            <if test="PO.classCode != null and PO.classCode != ''">
+                #{PO.classCode},
             </if>
-            <if test="dto.teacherCode != null and dto.teacherCode != ''">
-                #{dto.teacherCode}
+            <if test="PO.teacherCode != null and PO.teacherCode != ''">
+                #{PO.teacherCode},
+            </if>
+            <if test="PO.createBy != null and PO.createBy != ''">
+                #{PO.createBy},
+            </if>
+            <if test="PO.createTime != null">
+                #{PO.createTime},
             </if>
         </trim>
     </insert>
+    <select id="getCCTList" resultType="com.zhsj.business.courseClassTeacher.dto.CourseClassTeacherDto" parameterType="com.zhsj.business.courseClassTeacher.dto.CourseClassTeacherQueryDto">
+        SELECT
+	    bt.teacher_name,
+	    bc.course_name,
+	    bcs.class_name,
+	    bct.id
+        FROM
+	    `business_course_teacher` bct
+	    LEFT JOIN business_teacher bt ON bct.teacher_code = bt.teacher_code
+	    LEFT JOIN business_course bc ON bct.course_code = bc.course_code
+	    LEFT JOIN business_class bcs ON bct.class_code = bcs.class_code
+        <where>
+            <if test="dto.teacherCode != null and dto.teacherCode != ''">and bct.teacher_code = #{dto.teacherCode}</if>
+            <if test="dto.classCode != null and dto.classCode != ''">and bct.class_code = #{dto.classCode}</if>
+            <if test="dto.courseCode != null and dto.courseCode != ''">and bct.course_code = #{dto.courseCode}</if>
+        </where>
+    </select>
+    <update id="modifyInformation" parameterType="com.zhsj.business.courseClassTeacher.domain.CourseClassTeacherPO">
+        update business_course_teacher
+        <trim prefix="set" suffixOverrides=",">
+            <if test="PO.courseCode != null and PO.courseCode != ''">
+                course_code = #{PO.courseCode},
+            </if>
+            <if test="PO.classCode != null and PO.classCode != ''">
+                class_code = #{PO.classCode},
+            </if>
+            <if test="PO.teacherCode != null and PO.teacherCode != ''">
+                teacher_code = #{PO.teacherCode},
+            </if>
+            <if test="PO.updateBy != null and PO.updateBy != ''">
+                update_by = #{PO.updateBy},
+            </if>
+            <if test="PO.updateTime != null">
+                update_time = #{PO.updateTime},
+            </if>
+        </trim>
+        where id = #{PO.id}
+    </update>
+    <select id="getSingle" parameterType="Long" resultType="com.zhsj.business.courseClassTeacher.dto.CourseClassTeacherDto">
+        SELECT
+--         bt.teacher_name,
+--         bc.course_name,
+--         bcs.class_name,
+        bct.teacher_code,
+        bct.course_code,
+        bct.class_code,
+        bct.id
+        FROM
+        `business_course_teacher` bct
+--         LEFT JOIN business_teacher bt ON bct.teacher_code = bt.teacher_code
+--         LEFT JOIN business_course bc ON bct.course_code = bc.course_code
+--         LEFT JOIN business_class bcs ON bct.class_code = bcs.class_code
+        <where>
+            and bct.id = #{dto.id}
+<!--            <if test="dto.teacherCode != null and dto.teacherCode != ''">and bct.teacher_code = #{dto.teacherCode}</if>-->
+<!--            <if test="dto.classCode != null and dto.classCode != ''">and bct.class_code = #{dto.classCode}</if>-->
+<!--            <if test="dto.courseCode != null and dto.courseCode != ''">and bct.course_code = #{dto.courseCode}</if>-->
+        </where>
+
+    </select>
 </mapper>

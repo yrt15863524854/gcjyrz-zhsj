@@ -5,15 +5,31 @@ import lombok.Data;
 @Data
 public class ManualDto {
     /**
+     * 设计书id
+     **/
+    private Long id;
+    /**
+     * 设计书编码
+     */
+    private String manualCode;
+    /**
      * 设计书题目
      */
     private String manualName;
     /**
      * 课程编码
      */
+    private String courseCode;
+    /**
+     * 课程名称
+     */
     private String courseName;
     /**
      * 班级编码
+     */
+    private String classCode;
+    /**
+     * 班级名称
      */
     private String className;
     /**

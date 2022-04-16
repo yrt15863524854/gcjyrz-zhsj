@@ -16,4 +16,12 @@ public class ManualQueryDto {
      * 课程编码
      */
     private String courseCode;
+    /**
+     * 学生学号
+     */
+    private String studentNo;
+    /**
+     * 学生组号
+     */
+    private String studentGroup;
 }

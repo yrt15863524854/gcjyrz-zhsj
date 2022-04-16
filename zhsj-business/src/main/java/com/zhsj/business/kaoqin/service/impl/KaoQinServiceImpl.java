@@ -1,6 +1,5 @@
 package com.zhsj.business.kaoqin.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zhsj.business.kaoqin.domain.KaoQinPO;
 import com.zhsj.business.kaoqin.dto.KaoQinDto;
@@ -30,7 +29,7 @@ public class KaoQinServiceImpl extends ServiceImpl<KaoQinMapper, KaoQinPO> imple
         kaoQinPO.setStudentNo(kaoQinDto.getStudentNo());
         kaoQinPO.setClassCode(kaoQinDto.getClassCode());
         String info;
-        if (status == 0){
+        if (status == 3){
             info = DateUtils.getTime() + kaoQinDto.getKaoqinStudent() + "出勤";
             kaoQinPO.setKaoqinInfo(info);
         } else if (status == 1){

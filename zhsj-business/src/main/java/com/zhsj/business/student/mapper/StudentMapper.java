@@ -26,15 +26,22 @@ public interface StudentMapper extends BaseMapper<StudentPO> {
     int addStudent(StudentPO studentPO);
 
     /**
-     * 修改学生信息
-     *
-     * @param studentPO 学生对象
-     * @return 结果
-     */
+     * @description updateStudent
+     * @date 2022/3/27 17:02
+     * @param studentPO
+     * @return int
+     * @author yrt
+     **/
     int updateStudent(StudentPO studentPO);
 
     @Select("select * from business_student where id = #{id}")
     StudentPO selectStudentById(Integer id);
-
+    /**
+     * @description getStudentById
+     * @date 2022/3/27 17:02
+     * @param id
+     * @return com.zhsj.business.student.domain.StudentPO
+     * @author yrt
+     **/
     StudentPO getStudentById(Integer id);
 }

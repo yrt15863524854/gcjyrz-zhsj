@@ -1,9 +1,11 @@
 package com.zhsj.common.utils.uuid;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * ID生成器工具类
  *
- * @author ruoyi
+ * @author zhsj
  */
 public class IdUtils
 {
@@ -46,4 +48,21 @@ public class IdUtils
     {
         return UUID.fastUUID().toString(true);
     }
+
+    private static AtomicInteger counter = new AtomicInteger(0);
+    /**
+     * @description longID
+     * @date 2022/4/2 11:03
+     * @param
+     * @return java.lang.Long
+     * @author yrt
+     **/
+    public static Long longID() {
+        if (counter.get() > 999999) {
+            counter.set(1);
+        }
+        long time = System.currentTimeMillis();
+        return time * 100 + counter.incrementAndGet();
+    }
+
 }

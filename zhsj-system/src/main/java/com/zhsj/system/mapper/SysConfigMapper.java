@@ -1,6 +1,7 @@
 package com.zhsj.system.mapper;
 
 import com.zhsj.system.domain.SysConfig;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
@@ -9,6 +10,7 @@ import java.util.List;
  *
  * @author zhsj
  */
+@Mapper
 public interface SysConfigMapper
 {
     /**

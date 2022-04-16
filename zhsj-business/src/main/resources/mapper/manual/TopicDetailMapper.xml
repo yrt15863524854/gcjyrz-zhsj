@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhsj.business.manual.mapper.TopicDetailMapper">
+    <select id="getTopicDetail" resultType="com.zhsj.business.manual.dto.TopicDetailDto" parameterType="com.zhsj.business.manual.dto.TopicDetailQueryDto">
+        select id, html, text, student_group
+        from business_topic_detail
+        <where>
+            <if test="dto != null and dto != ''">
+                <if test="dto.id != null and dto.id != ''">id = #{dto.id}</if>
+                <if test="dto.studentGroup != null and dto.studentGroup != ''">student_group = #{dto.studentGroup}</if>
+            </if>
+        </where>
+    </select>
+    <insert id="insertTopicDetail" parameterType="com.zhsj.business.manual.domain.TopicDetailPO">
+        insert business_topic_detail
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            id,student_group,
+            <if test="PO.html != null and PO.html != ''">html,</if>
+            <if test="PO.text != null and PO.text != ''">text,</if>
+            <if test="PO.createBy != null and PO.createBy != ''">create_by,</if>
+            <if test="PO.createTime != null">create_time,</if>
+        </trim>
+        <trim prefix="values (" suffixOverrides="," suffix=")">
+            #{PO.id},#{PO.studentGroup},
+            <if test="PO.html != null and PO.html != ''">
+                #{PO.html},
+            </if>
+        <if test="PO.text != null and PO.text != ''">
+            #{PO.text},
+        </if>
+            <if test="PO.createBy != null and PO.createBy != ''">#{PO.createBy},</if>
+            <if test="PO.createTime != null">#{PO.createTime},</if>
+        </trim>
+    </insert>
+    <update id="updateTopicDetail" parameterType="com.zhsj.business.manual.domain.TopicDetailPO">
+        update business_topic_detail
+        <trim prefix="set" suffixOverrides=",">
+            <if test="PO.html != null and PO.html != ''">html = #{PO.html},</if>
+            <if test="PO.text != null and PO.text != ''">text = #{PO.text},</if>
+            <if test="PO.updateBy != null and PO.updateBy != ''">update_by = #{PO.updateBy},</if>
+            <if test="PO.updateTime != null">update_time = #{PO.updateTime},</if>
+        </trim>
+        where id = #{PO.id}
+    </update>
+</mapper>

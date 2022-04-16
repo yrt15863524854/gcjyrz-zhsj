@@ -11,12 +11,18 @@ import com.zhsj.business.student.service.StudentService;
 import com.zhsj.common.config.ZhsjConfig;
 import com.zhsj.common.core.controller.BaseController;
 import com.zhsj.common.core.domain.AjaxResult;
+import com.zhsj.common.core.domain.entity.SysUser;
 import com.zhsj.common.core.page.TableDataInfo;
 import com.zhsj.common.exception.base.BaseException;
 import com.zhsj.common.utils.DateUtils;
 import com.zhsj.common.utils.ImportUtils;
 import com.zhsj.common.utils.SecurityUtils;
 import com.zhsj.common.utils.StringUtils;
+import com.zhsj.system.domain.SysUserRole;
+import com.zhsj.system.domain.UserRolePO;
+import com.zhsj.system.mapper.SysUserMapper;
+import com.zhsj.system.service.ISysRoleService;
+import com.zhsj.system.service.ISysUserService;
 import jdk.nashorn.internal.objects.Global;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.ss.usermodel.Row;
@@ -41,11 +47,15 @@ import java.util.*;
 @RequestMapping("business/student")
 public class StudentController extends BaseController {
     @Resource
+    private ISysUserService iSysUserService;
+    @Resource
     private StudentService studentService;
     @Resource
     private StudentMapper studentMapper;
     @Resource
     private ClassInfoMapper classInfoMapper;
+    @Resource
+    private ISysRoleService iSysRoleService;
     @GetMapping("/get")
     public TableDataInfo get(StudentQueryDto studentQueryDto){
         startPage();
@@ -134,6 +144,8 @@ public class StudentController extends BaseController {
         }
         for (int i = 1; i<= sheet.getLastRowNum(); i++){
             StudentPO detail = new StudentPO();
+            SysUser user = new SysUser();
+            UserRolePO userRolePO = new UserRolePO();
             currentRow = sheet.getRow(i);
             if (currentRow == null) {
                 continue;
@@ -141,40 +153,52 @@ public class StudentController extends BaseController {
             //学生编码
             String studentCode = ImportUtils.getJavaValue(currentRow.getCell(0)).toString();
             if (studentCode.isEmpty()) {
-                throw new RuntimeException("第" + (i + 1) + "学生编码不能为空");
+                throw new BaseException("第" + (i + 1) + "学生编码不能为空");
+                //throw new RuntimeException("第" + (i + 1) + "学生编码不能为空");
             } else {
                 StudentPO code = studentMapper.selectOne(new QueryWrapper<StudentPO>().eq("student_code", studentCode));
                 if (Objects.nonNull(code)) {
-                    throw new RuntimeException("第" + (i + 1) + "行的学生编码信息已存在");
+                    throw new BaseException("第" + (i + 1) + "行的学生编码信息已存在");
+                    //throw new RuntimeException("第" + (i + 1) + "行的学生编码信息已存在");
                 }
                 detail.setStudentCode(studentCode);
             }
             //学生学号
             String studentNo = ImportUtils.getJavaValue(currentRow.getCell(1)).toString();
             if (studentNo.isEmpty()) {
-                throw new RuntimeException("第" + (i + 1) + "学生学号不能为空");
+                throw new BaseException("第" + (i + 1) + "学生学号不能为空");
+                //throw new RuntimeException("第" + (i + 1) + "学生学号不能为空");
             } else {
                 StudentPO no = studentMapper.selectOne(new QueryWrapper<StudentPO>().eq("student_no", studentNo));
                 if (Objects.nonNull(no)) {
-                    throw new RuntimeException("第" + (i + 1) + "行学生学号信息已存在");
+                    throw new BaseException("第" + (i + 1) + "行学生学号信息已存在");
+                   //throw new RuntimeException("第" + (i + 1) + "行学生学号信息已存在");
                 }
+                long sno = Long.parseLong(studentNo);
+                user.setUserId(sno);
+                user.setUserName(studentNo);
+                userRolePO.setUserId(sno);
                 detail.setStudentNo(Integer.parseInt(studentNo));
             }
             //学生姓名
             String studentName = ImportUtils.getJavaValue(currentRow.getCell(2)).toString();
             if (studentName.isEmpty()) {
-                throw new RuntimeException("第" + (i + 1) + "学生姓名不能为空");
+                throw new BaseException("第" + (i + 1) + "学生姓名不能为空");
+                //throw new RuntimeException("第" + (i + 1) + "学生姓名不能为空");
             } else {
+                user.setNickName(studentName);
                 detail.setStudentName(studentName);
             }
             //学生班级
             String studentClass = ImportUtils.getJavaValue(currentRow.getCell(3)).toString();
             if (studentClass.isEmpty()) {
-                throw new RuntimeException("第" + (i + 1) + "学生班级不能为空");
+                throw new BaseException("第" + (i + 1) + "学生班级不能为空");
+                //throw new RuntimeException("第" + (i + 1) + "学生班级不能为空");
             } else {
                 ClassInfoPO code = classInfoMapper.selectOne(new QueryWrapper<ClassInfoPO>().eq("class_code", studentClass));
                 if (Objects.isNull(code)) {
-                    throw new RuntimeException("第" + (i + 1) + "行的班级信息未找到");
+                    throw new BaseException("第" + (i + 1) + "行的班级信息未找到");
+                    //throw new RuntimeException("第" + (i + 1) + "行的班级信息未找到");
                 }
                 detail.setStudentClass(studentClass);
             }
@@ -194,6 +218,11 @@ public class StudentController extends BaseController {
             }
             detail.setCreateBy(SecurityUtils.getUsername());
             detail.setCreateTime(DateUtils.getNowDate());
+            user.setCreateBy(getUsername());
+            user.setPassword(SecurityUtils.encryptPassword("123456"));
+            userRolePO.setRoleId((long)100);
+            iSysUserService.insertUser(user);
+            iSysRoleService.insertUserRole(userRolePO);
             list.add(detail);
         }
         return list;

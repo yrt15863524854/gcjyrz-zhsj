@@ -11,6 +11,7 @@ import com.zhsj.common.utils.spring.SpringUtils;
 import com.zhsj.system.domain.SysRoleDept;
 import com.zhsj.system.domain.SysRoleMenu;
 import com.zhsj.system.domain.SysUserRole;
+import com.zhsj.system.domain.UserRolePO;
 import com.zhsj.system.mapper.SysRoleDeptMapper;
 import com.zhsj.system.mapper.SysRoleMapper;
 import com.zhsj.system.mapper.SysRoleMenuMapper;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.*;
 
 /**
@@ -41,6 +43,7 @@ public class SysRoleServiceImpl implements ISysRoleService
 
     @Autowired
     private SysRoleDeptMapper roleDeptMapper;
+
 
     /**
      * 根据条件分页查询角色数据
@@ -416,5 +419,10 @@ public class SysRoleServiceImpl implements ISysRoleService
             list.add(ur);
         }
         return userRoleMapper.batchUserRole(list);
+    }
+
+    @Override
+    public void insertUserRole(UserRolePO userRolePO) {
+        userRoleMapper.insertUserRole(userRolePO);
     }
 }
