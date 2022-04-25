@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhsj.business.courseTask.mapper.CourseTaskMapper">
+    <select id="getTaskBookList" resultType="com.zhsj.business.courseTask.dto.CourseTaskDto">
+        select bct.id, bct.course_code, bc.course_name, bc.course_nature, bct.course_task_name, bct.course_briefly, bct.create_by, bct.course_task_html
+        from business_course_task bct
+        left join business_course bc
+        on bct.course_code = bc.course_code
+    </select>
+    <select id="getTaskBook" resultType="com.zhsj.business.courseTask.dto.CourseTaskDto" parameterType="com.zhsj.business.courseTask.dto.CourseTaskQueryDto">
+        select bct.id, bct.course_code, bc.course_name, bc.course_nature, bct.course_task_name, bct.course_briefly, bct.create_by, bct.course_task_html
+        from business_course_task bct
+        left join business_course bc
+        on bct.course_code = bc.course_code
+        where bct.course_code = #{dto.courseCode}
+    </select>
+</mapper>

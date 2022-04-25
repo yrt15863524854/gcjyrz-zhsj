@@ -22,13 +22,25 @@ public class StudentDto {
     /**
      * 学号
      */
-    private Integer studentNo;
+    private String  studentNo;
+    /**
+     * 学生班级名称
+     */
+    private String studentClass;
     /**
      * 学生班级
      */
-    private String studentClass;
+    private String classCode;
     /**
      * 学生组号
      */
     private Integer studentGroup;
+    /**
+     * 是否为组长
+     */
+    private Integer leader;
+    /**
+     * 考勤状态
+     */
+    private Integer studentKaoqin;
 }

@@ -12,5 +12,5 @@ import lombok.Data;
 @Data
 public class PointDetailQueryDto {
     private Long id;
-    private Long studentNo;
+    private String studentNo;
 }

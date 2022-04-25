@@ -55,11 +55,19 @@ public class PointServiceImpl extends ServiceImpl<PointMapper, PointPO> implemen
             po.setPointCode(IdUtils.simpleUUID());
             po.setCreateBy(SecurityUtils.getLoginUser().getUsername());
             po.setCreateTime(DateUtils.getNowDate());
-            int result = pointMapper.insertPoint(po);
-            if (result <= 0){
+            QueryWrapper<PointPO> wrapper1 = new QueryWrapper<>();
+            wrapper1.eq("point_name", po.getPointName());
+            List<PointPO> list1 = pointMapper.selectList(wrapper1);
+            if (list1.size() > 0) {
                 map.put("error1Code", "1");
+                map.put("errorMessage", po.getPointName() + "已存在");
             } else {
-                map.put("error1Code", "2");
+                int result = pointMapper.insertPoint(po);
+                if (result <= 0){
+                    map.put("error1Code", "1");
+                } else {
+                    map.put("error1Code", "2");
+                }
             }
         }
         return map;
@@ -91,11 +99,19 @@ public class PointServiceImpl extends ServiceImpl<PointMapper, PointPO> implemen
             BeanUtils.copyProperties(dto, po);
             po.setUpdateBy(SecurityUtils.getLoginUser().getUsername());
             po.setUpdateTime(DateUtils.getNowDate());
-            int result = pointMapper.updatePoint(po);
-            if (result <= 0){
+            QueryWrapper<PointPO> wrapper1 = new QueryWrapper<>();
+            wrapper1.ne("id",po.getId()).eq("point_name", po.getPointName());
+            List<PointPO> list1 = pointMapper.selectList(wrapper1);
+            if (list1.size() > 0) {
                 map.put("error1Code", "1");
+                map.put("errorMessage", po.getPointName() + "已存在");
             } else {
-                map.put("error1Code", "2");
+                int result = pointMapper.updatePoint(po);
+                if (result <= 0){
+                    map.put("error1Code", "1");
+                } else {
+                    map.put("error1Code", "2");
+                }
             }
         }
         return map;

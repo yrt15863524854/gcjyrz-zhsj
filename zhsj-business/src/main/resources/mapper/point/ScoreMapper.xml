@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhsj.business.point.mapper.ScoreMapper">
+    <select id="getStudentScore" parameterType="com.zhsj.business.point.dto.ScoreQueryDto" resultType="com.zhsj.business.point.dto.ScoreDto">
+        select bs.student_no, bs.student_name, bs.student_group, bc.class_name, bs2.student_score
+        from business_student bs
+        left join business_class bc
+        on bs.student_class  = bc.class_code
+        left join business_score bs2
+        on bs.student_no = bs2.student_no
+        order by bs.student_no asc
+        <where>
+            <if test="dto.studentName != null  and dto.studentName != ''"> and bs.student_name like concat('%', #{dto.studentName}, '%')</if>
+            <if test="dto.studentNo != null "> and bs.student_no = #{dto.studentNo}</if>
+            <if test="dto.studentGroup != null "> and bs.student_group = #{dto.studentGroup}</if>
+        </where>
+    </select>
+</mapper>

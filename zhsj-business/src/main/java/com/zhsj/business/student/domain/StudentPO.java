@@ -30,7 +30,7 @@ public class StudentPO extends BaseEntityPO {
     /**
      * 学号
      */
-    private Integer studentNo;
+    private String studentNo;
     /**
      * 学生班级
      */

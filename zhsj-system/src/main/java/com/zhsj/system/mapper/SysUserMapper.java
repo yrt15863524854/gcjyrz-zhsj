@@ -95,6 +95,15 @@ public interface SysUserMapper
     public int deleteUserById(Long userId);
 
     /**
+     * @description deleteUserByUserId
+     * @date 2022/4/25 13:57
+     * @param userId
+     * @return int
+     * @author yrt
+     **/
+    public int deleteUserByUserId(@Param("userId") Long userId);
+
+    /**
      * 批量删除用户信息
      *
      * @param userIds 需要删除的用户ID

@@ -13,4 +13,5 @@ import lombok.Data;
 public class TopicDetailQueryDto {
     private Long id;
     private Integer studentGroup;
+    private String classCode;
 }

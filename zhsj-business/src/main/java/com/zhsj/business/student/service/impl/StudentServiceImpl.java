@@ -12,6 +12,7 @@ import com.zhsj.common.core.domain.entity.SysUser;
 import com.zhsj.common.exception.base.BaseException;
 import com.zhsj.common.utils.DateUtils;
 import com.zhsj.common.utils.SecurityUtils;
+import com.zhsj.common.utils.uuid.IdUtils;
 import com.zhsj.system.domain.UserRolePO;
 import com.zhsj.system.service.ISysRoleService;
 import com.zhsj.system.service.ISysUserService;
@@ -45,9 +46,14 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, StudentPO> im
         if (Objects.isNull(studentPO.getId())) {
             SysUser user = new SysUser();
             UserRolePO userRolePO = new UserRolePO();
+            studentPO.setStudentCode(IdUtils.fastSimpleUUID());
             List<StudentPO> list = studentMapper.selectList(new QueryWrapper<StudentPO>().eq("student_code", studentPO.getStudentCode()));
             if (list.size() > 0) {
-                throw new BaseException("该学生编码"+studentPO.getStudentCode()+"已存在");
+                throw new BaseException("该学生编码" + studentPO.getStudentCode() + "已存在");
+            }
+            List<StudentPO> list1 = studentMapper.selectList(new QueryWrapper<StudentPO>().eq("student_no", studentPO.getStudentNo()));
+            if (list1.size() > 0) {
+                throw new BaseException("该学生编号" + studentPO.getStudentNo() + "已存在");
             }
             String sno = studentPO.getStudentNo() + "";
             user.setUserId(Long.parseLong(sno));

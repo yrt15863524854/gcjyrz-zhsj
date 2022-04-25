@@ -425,4 +425,9 @@ public class SysRoleServiceImpl implements ISysRoleService
     public void insertUserRole(UserRolePO userRolePO) {
         userRoleMapper.insertUserRole(userRolePO);
     }
+
+    @Override
+    public void deleteUserRoleByUserId(Long userId) {
+        userRoleMapper.deleteUserRoleByUserId(userId);
+    }
 }

@@ -187,6 +187,8 @@ public interface ISysUserService
      */
     public int deleteUserById(Long userId);
 
+    int deleteUserByUserId(Long userId);
+
     /**
      * 批量删除用户信息
      *

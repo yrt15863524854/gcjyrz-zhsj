@@ -19,6 +19,7 @@ public class PointDetailPO extends BaseEntityPO {
     private Long id;
     private String pointCode;
     private String pointName;
-    private Long studentNo;
+    private String studentNo;
     private String pointScore;
+    private String pointScoreRatio;
 }

@@ -34,7 +34,7 @@ public class PointController extends BaseController {
     @PostMapping("/getPointInfo")
     public TableDataInfo getPointInfo(@RequestBody PointQueryDto dto) {
         QueryWrapper<PointPO> wrapper = new QueryWrapper<>();
-        if (Objects.nonNull(dto.getPointName()) || "".equals(dto.getPointName())) {
+        if (Objects.nonNull(dto.getPointName())) {
             wrapper.eq("point_name", dto.getPointName());
         }
         List<PointPO> list = pointService.list(wrapper);

@@ -178,7 +178,7 @@ public class StudentController extends BaseController {
                 user.setUserId(sno);
                 user.setUserName(studentNo);
                 userRolePO.setUserId(sno);
-                detail.setStudentNo(Integer.parseInt(studentNo));
+                detail.setStudentNo(studentNo);
             }
             //学生姓名
             String studentName = ImportUtils.getJavaValue(currentRow.getCell(2)).toString();

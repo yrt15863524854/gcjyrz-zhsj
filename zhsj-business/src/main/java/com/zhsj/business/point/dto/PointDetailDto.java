@@ -17,4 +17,9 @@ public class PointDetailDto {
     private String pointScore;
     private String pointCode;
     private String pointName;
+    private String pointScoreRatio;
+    private String pointRatio;
+    private String studentScore;
+    private String studentGroup;
+    private String studentClass;
 }

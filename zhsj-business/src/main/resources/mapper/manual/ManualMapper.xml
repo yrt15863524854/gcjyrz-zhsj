@@ -11,9 +11,10 @@
         <result column="is_audit" property="isAudit"/>
         <result column="feedback" property="feedback"/>
         <result column="manual_code" property="manualCode"/>
+        <result column="class_code" property="classCode"/>
     </resultMap>
     <select id="listManualInfo" resultMap="manualResult" parameterType="com.zhsj.business.manual.dto.ManualQueryDto">
-        select bm.id,bm.manual_code,bm.manual_name,bm.student_group,bm.feedback,bm.is_audit,bc.class_name as className,bc2.course_name as courseName from business_manual bm left join business_class bc
+        select bm.id,bm.manual_code,bm.manual_name,bm.student_group,bm.feedback,bm.is_audit,bc.class_name as className,bc2.course_name as courseName, bm.class_code from business_manual bm left join business_class bc
         on bc.class_code = bm.class_code left join business_course bc2 on bc2 .course_code = bm .course_code
         <where>
             bm.course_code =
@@ -129,7 +130,7 @@
         on bc.class_code = (select student_class from business_student where student_no	= #{dto.studentNo})
         left join business_course bc2
         on bc2.course_code = bm.course_code
-        where bm.student_group = #{dto.studentGroup}
+        where bm.student_group = #{dto.studentGroup} and bm.class_code = #{dto.classCode}
     </select>
 
 </mapper>

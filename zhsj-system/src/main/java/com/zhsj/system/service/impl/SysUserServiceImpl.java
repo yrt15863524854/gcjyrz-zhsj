@@ -466,6 +466,13 @@ public class SysUserServiceImpl implements ISysUserService
         return userMapper.deleteUserById(userId);
     }
 
+    @Override
+    @Transactional
+    public int deleteUserByUserId(Long userId)
+    {
+        return userMapper.deleteUserByUserId(userId);
+    }
+
     /**
      * 批量删除用户信息
      *

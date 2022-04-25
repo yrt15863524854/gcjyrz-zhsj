@@ -41,4 +41,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  	        #{userId}
             </foreach>
 	</delete>
+	<insert id="insertUserRole" parameterType="UserRolePO">
+		insert into sys_user_role(user_id, role_id) values
+		<trim suffix=")" suffixOverrides="," prefix="(">
+			<if test="PO.userId != null and PO.userId != ''">
+				#{PO.userId},
+			</if>
+			<if test="PO.roleId != null and PO.userId != ''">
+				#{PO.roleId},
+			</if>
+		</trim>
+	</insert>
 </mapper>

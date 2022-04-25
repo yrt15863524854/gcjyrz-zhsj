@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhsj.business.uploadDown.mapper.UploadMapper">
+    <select id="getUploadRecord" parameterType="String" resultType="com.zhsj.business.uploadDown.dto.UploadDto">
+        select bu.upload_name, bu.student_no, bu.student_group, max(bu.upload_time) uploadTime
+        from business_upload bu
+        where bu.student_no = #{studentNo}
+    </select>
+    <select id="getUploadRecord2" parameterType="com.zhsj.business.uploadDown.dto.UploadQueryDto" resultType="com.zhsj.business.uploadDown.dto.UploadDto">
+        select bu.upload_name, bu.student_no, bu.student_group, max(bu.upload_time) uploadTime
+        from business_upload bu
+        where bu.student_no = #{dto.studentNo} and bu.upload_time = #{dto.uploadTime}
+    </select>
+</mapper>

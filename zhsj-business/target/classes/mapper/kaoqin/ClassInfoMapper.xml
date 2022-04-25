@@ -10,4 +10,8 @@
     <select id="listClassInfo" resultMap="classInfoResult">
         SELECT class_code,class_name FROM `business_class`
     </select>
+    <select id="getClassCode" parameterType="String" resultType="String">
+        SELECT class_code FROM business_class
+        WHERE class_name = #{className}
+    </select>
 </mapper>

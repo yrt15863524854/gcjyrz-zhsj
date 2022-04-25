@@ -18,4 +18,6 @@ public class TopicDetailDto {
     private String text;
     //学生组号
     private Integer studentGroup;
+    //课程编码
+    private String classCode;
 }

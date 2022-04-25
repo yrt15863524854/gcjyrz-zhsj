@@ -1,25 +1,37 @@
 package com.zhsj.business.courseTask.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.zhsj.business.course.service.CourseService;
+import com.zhsj.business.courseTask.domain.CourseTaskPO;
+import com.zhsj.business.courseTask.dto.CourseTaskDto;
+import com.zhsj.business.courseTask.dto.CourseTaskQueryDto;
+import com.zhsj.business.courseTask.service.CourseTaskService;
 import com.zhsj.common.config.ZhsjConfig;
 import com.zhsj.common.core.controller.BaseController;
 import com.zhsj.common.core.domain.AjaxResult;
 import com.zhsj.common.utils.SecurityUtils;
+import com.zhsj.common.utils.bean.BeanUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("business/courseTask")
 public class CourseTaskController extends BaseController {
+
+    @Resource
+    private CourseTaskService courseTaskService;
 
     @PostMapping("/importData")
     @ResponseBody
@@ -27,6 +39,10 @@ public class CourseTaskController extends BaseController {
         String imagePath = ZhsjConfig.getProfile();
         String userName = SecurityUtils.getLoginUser().getUsername();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
+//        SimpleDateFormat mm = new SimpleDateFormat("MM");
+//        SimpleDateFormat yyyy = new SimpleDateFormat("yyyy");
+//        String month = mm.format(new Date());
+//        String year = yyyy.format(new Date());
         Calendar cal = Calendar.getInstance();
         String month = sdf.format(cal.get(Calendar.MONTH));
         String day = sdf.format(cal.get(Calendar.DAY_OF_MONTH));
@@ -62,5 +78,22 @@ public class CourseTaskController extends BaseController {
             }
         }
         return AjaxResult.success("上传成功");
+    }
+    @PostMapping("/insertTaskBook")
+    public Map<String, Object> insertTaskBook(@RequestBody CourseTaskDto dto) {
+        return courseTaskService.insertTaskBook(dto);
+    }
+    @PostMapping("/updateTaskBook")
+    public Map<String, Object> updateTaskBook(@RequestBody CourseTaskDto dto) {
+        return courseTaskService.updateTaskBook(dto);
+    }
+    @PostMapping("/getTaskBook")
+    public CourseTaskDto getTaskBook(@RequestBody CourseTaskQueryDto courseCode) {
+        return courseTaskService.getTaskBook(courseCode);
+    }
+    @PostMapping("/getTaskBookList")
+    public List<CourseTaskDto> getTaskBookList() {
+        return courseTaskService.getTaskBookList();
+
     }
 }

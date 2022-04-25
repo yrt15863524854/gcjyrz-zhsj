@@ -180,4 +180,6 @@ public interface ISysRoleService
      * @author yrt
      **/
     void insertUserRole(UserRolePO userRolePO);
+
+    void deleteUserRoleByUserId(Long userId);
 }

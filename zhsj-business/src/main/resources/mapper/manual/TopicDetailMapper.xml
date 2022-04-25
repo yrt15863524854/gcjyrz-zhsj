@@ -8,22 +8,23 @@
         from business_topic_detail
         <where>
             <if test="dto != null and dto != ''">
-                <if test="dto.id != null and dto.id != ''">id = #{dto.id}</if>
-                <if test="dto.studentGroup != null and dto.studentGroup != ''">student_group = #{dto.studentGroup}</if>
+                <if test="dto.id != null and dto.id != ''">and id = #{dto.id}</if>
+                <if test="dto.studentGroup != null and dto.studentGroup != ''">and student_group = #{dto.studentGroup}</if>
+                <if test="dto.classCode != null and dto.classCode != ''">and class_code = #{dto.classCode}</if>
             </if>
         </where>
     </select>
     <insert id="insertTopicDetail" parameterType="com.zhsj.business.manual.domain.TopicDetailPO">
         insert business_topic_detail
         <trim prefix="(" suffixOverrides="," suffix=")">
-            id,student_group,
+            id,student_group,class_code,
             <if test="PO.html != null and PO.html != ''">html,</if>
             <if test="PO.text != null and PO.text != ''">text,</if>
             <if test="PO.createBy != null and PO.createBy != ''">create_by,</if>
             <if test="PO.createTime != null">create_time,</if>
         </trim>
         <trim prefix="values (" suffixOverrides="," suffix=")">
-            #{PO.id},#{PO.studentGroup},
+            #{PO.id},#{PO.studentGroup},#{PO.classCode},
             <if test="PO.html != null and PO.html != ''">
                 #{PO.html},
             </if>

@@ -8,6 +8,6 @@ import lombok.Data;
 @Data
 public class StudentQueryDto {
     private String studentName;
-    private Integer studentNo;
+    private String studentNo;
     private Integer studentGroup;
 }
