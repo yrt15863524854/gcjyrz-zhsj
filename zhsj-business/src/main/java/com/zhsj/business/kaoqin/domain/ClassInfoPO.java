@@ -17,7 +17,7 @@ public class ClassInfoPO extends BaseEntityPO {
     /**
      * 班级id
      */
-    private Integer id;
+    private Long id;
     /**
      * 班级编码
      */

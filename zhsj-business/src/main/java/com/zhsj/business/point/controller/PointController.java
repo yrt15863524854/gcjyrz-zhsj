@@ -2,19 +2,23 @@ package com.zhsj.business.point.controller;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.zhsj.business.kaoqin.domain.ClassInfoPO;
+import com.zhsj.business.kaoqin.service.ClassInfoService;
 import com.zhsj.business.point.domain.PointPO;
-import com.zhsj.business.point.dto.PointDto;
-import com.zhsj.business.point.dto.PointQueryDto;
+import com.zhsj.business.point.dto.*;
+import com.zhsj.business.point.service.PointDetailService;
 import com.zhsj.business.point.service.PointService;
 import com.zhsj.common.core.controller.BaseController;
 import com.zhsj.common.core.page.TableDataInfo;
 import com.zhsj.common.utils.bean.BeanUtils;
+import com.zhsj.common.utils.poi.ExcelUtil;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -31,6 +35,10 @@ import java.util.Objects;
 public class PointController extends BaseController {
     @Resource
     private PointService pointService;
+    @Resource
+    private PointDetailService pointDetailService;
+    @Resource
+    private ClassInfoService classInfoService;
     @PostMapping("/getPointInfo")
     public TableDataInfo getPointInfo(@RequestBody PointQueryDto dto) {
         QueryWrapper<PointPO> wrapper = new QueryWrapper<>();
@@ -64,5 +72,15 @@ public class PointController extends BaseController {
         QueryWrapper<PointPO> wrapper = new QueryWrapper<>();
         wrapper.eq("id", queryDto.getId());
         return pointService.getOne(wrapper);
+    }
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, ExcelQueryDto dto) {
+        QueryWrapper<ClassInfoPO> wrapper = new QueryWrapper<>();
+        wrapper.eq("class_code", dto.getClassCode());
+        ClassInfoPO classInfo = classInfoService.getOne(wrapper);
+        String className = classInfo.getClassName();
+        List<ExcelDto> list = pointDetailService.listExcel(dto);
+        ExcelUtil<ExcelDto> util = new ExcelUtil<>(ExcelDto.class);
+        util.exportExcel(response, list, className + "评分明细");
     }
 }

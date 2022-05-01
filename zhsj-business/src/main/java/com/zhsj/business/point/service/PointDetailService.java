@@ -2,8 +2,13 @@ package com.zhsj.business.point.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.zhsj.business.point.domain.PointDetailPO;
+import com.zhsj.business.point.dto.ExcelDto;
+import com.zhsj.business.point.dto.ExcelQueryDto;
 import com.zhsj.business.point.dto.PointDetailDto;
 import com.zhsj.business.point.dto.PointDetailQueryDto;
+import com.zhsj.common.annotation.Excel;
+
+import java.util.List;
 
 /**
  * @interfaceName: PointDetailService
@@ -16,4 +21,5 @@ public interface PointDetailService extends IService<PointDetailPO> {
     void insertPointDetail(PointDetailDto dto);
     void updatePointDetail(PointDetailDto dto);
     PointDetailPO getOneDataById(PointDetailQueryDto dto);
+    List<ExcelDto> listExcel(ExcelQueryDto dto);
 }

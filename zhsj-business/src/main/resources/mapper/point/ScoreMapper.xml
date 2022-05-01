@@ -10,11 +10,11 @@
         on bs.student_class  = bc.class_code
         left join business_score bs2
         on bs.student_no = bs2.student_no
-        order by bs.student_no asc
         <where>
             <if test="dto.studentName != null  and dto.studentName != ''"> and bs.student_name like concat('%', #{dto.studentName}, '%')</if>
             <if test="dto.studentNo != null "> and bs.student_no = #{dto.studentNo}</if>
             <if test="dto.studentGroup != null "> and bs.student_group = #{dto.studentGroup}</if>
         </where>
+        order by bs.student_no asc
     </select>
 </mapper>

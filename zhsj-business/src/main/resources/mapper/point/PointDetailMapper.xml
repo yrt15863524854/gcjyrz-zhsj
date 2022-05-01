@@ -3,5 +3,17 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhsj.business.point.mapper.PointDetailMapper">
-
+    <select id="listPointExcel" parameterType="com.zhsj.business.point.dto.ExcelQueryDto" resultType="com.zhsj.business.point.dto.PointExcelDto">
+        select bpd.student_no,bpd.point_name,bc.class_name, bs.student_name, bpd.point_score
+        from business_point_detail bpd
+        left join business_class bc
+        on bc.class_code =  bpd.class_code
+        left join business_student bs
+        on bs.student_no = bpd.student_no
+        <where>
+            <if test="dto.classCode != null and dto.classCode != ''">
+                bpd.class_code = #{dto.classCode}
+            </if>
+        </where>
+    </select>
 </mapper>

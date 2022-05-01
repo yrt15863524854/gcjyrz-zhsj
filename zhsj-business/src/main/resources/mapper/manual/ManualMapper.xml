@@ -132,5 +132,16 @@
         on bc2.course_code = bm.course_code
         where bm.student_group = #{dto.studentGroup} and bm.class_code = #{dto.classCode}
     </select>
-
+    <select id="getClassAndCourseByTeacher" parameterType="string" resultType="com.zhsj.business.courseClassTeacher.dto.CourseClassDto">
+        select * from business_course_teacher where teacher_code = #{teacherCode}
+    </select>
+    <select id="getManualByCAndC" resultType="com.zhsj.business.manual.dto.ManualDto" parameterType="com.zhsj.business.courseClassTeacher.dto.CourseClassDto">
+        select bm.id,bm.manual_code,bm.manual_name,bm.student_group,bm.feedback,bm.is_audit,bc.class_name as className,bc2.course_name as courseName, bm.class_code
+        from business_manual bm
+        left join business_class bc
+        on bc.class_code = bm.class_code
+        left join business_course bc2
+        on bc2 .course_code = bm .course_code
+        where bm.class_code = #{dto.classCode} and bm.course_code = #{dto.courseCode}
+    </select>
 </mapper>

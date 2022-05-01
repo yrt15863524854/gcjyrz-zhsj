@@ -22,4 +22,5 @@ public class PointDetailPO extends BaseEntityPO {
     private String studentNo;
     private String pointScore;
     private String pointScoreRatio;
+    private String classCode;
 }

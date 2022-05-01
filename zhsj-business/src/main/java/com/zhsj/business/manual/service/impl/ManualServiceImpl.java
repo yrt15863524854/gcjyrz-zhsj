@@ -1,6 +1,7 @@
 package com.zhsj.business.manual.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.zhsj.business.courseClassTeacher.dto.CourseClassDto;
 import com.zhsj.business.kaoqin.mapper.ClassInfoMapper;
 import com.zhsj.business.manual.domain.ManualPO;
 import com.zhsj.business.manual.dto.GroupAndClassNameDto;
@@ -17,9 +18,7 @@ import com.zhsj.common.utils.uuid.IdUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ManualServiceImpl extends ServiceImpl<ManualMapper, ManualPO> implements ManualService {
@@ -38,7 +37,29 @@ public class ManualServiceImpl extends ServiceImpl<ManualMapper, ManualPO> imple
      **/
     @Override
     public List<ManualDto> ListManualInfo(ManualQueryDto manualQueryDto) {
-        return manualMapper.listManualInfo(manualQueryDto);
+        List<CourseClassDto> list = manualMapper.getClassAndCourseByTeacher(manualQueryDto.getTeacherCode());
+        List<ManualDto> manualDtoList = new ArrayList<>();
+        for (CourseClassDto courseClassDto : list) {
+            ManualDto manualByCAndC = manualMapper.getManualByCAndC(courseClassDto);
+            if (Objects.nonNull(manualByCAndC)) {
+                manualDtoList.add(manualByCAndC);
+            }
+        }
+        if (Objects.nonNull(manualQueryDto.getClassCode())) {
+            for (int i = manualDtoList.size() - 1; i >= 0; i--) {
+                if (!manualQueryDto.getClassCode().equals(manualDtoList.get(i).getClassCode())) {
+                    manualDtoList.remove(manualDtoList.get(i));
+                }
+            }
+        }
+        if (Objects.nonNull(manualQueryDto.getCourseCode())) {
+            for (int i = manualDtoList.size() - 1; i >= 0; i--) {
+                if (!manualQueryDto.getCourseCode().equals(manualDtoList.get(i).getCourseCode())) {
+                    manualDtoList.remove(manualDtoList.get(i));
+                }
+            }
+        }
+        return manualDtoList;
     }
     /**
      * @description insertManual
