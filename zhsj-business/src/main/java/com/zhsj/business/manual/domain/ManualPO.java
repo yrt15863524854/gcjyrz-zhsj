@@ -36,4 +36,12 @@ public class ManualPO extends BaseEntityPO {
      * 是否审核
      */
     private Integer isAudit;
+    /**
+     * 学生学号
+     */
+    private String studentNo;
+    /**
+     * 功能模块
+     */
+    private String functionalModule;
 }

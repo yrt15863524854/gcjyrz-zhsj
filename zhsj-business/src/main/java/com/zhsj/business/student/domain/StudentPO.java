@@ -2,8 +2,10 @@ package com.zhsj.business.student.domain;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.zhsj.common.core.domain.BaseEntityPO;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * student实体类
@@ -11,10 +13,11 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @TableName("business_student")
 public class StudentPO extends BaseEntityPO {
 
-    private static final long serialVersionUID = 1L;
     /**
      * 学生id
      */
@@ -43,5 +46,9 @@ public class StudentPO extends BaseEntityPO {
      * 是否为组长
      */
     private Integer leader;
+    /**
+     * 是否缺考
+     */
+    private Integer isQueKao;
 
 }

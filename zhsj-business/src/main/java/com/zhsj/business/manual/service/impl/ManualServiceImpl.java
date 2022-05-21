@@ -1,5 +1,6 @@
 package com.zhsj.business.manual.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zhsj.business.courseClassTeacher.dto.CourseClassDto;
 import com.zhsj.business.kaoqin.mapper.ClassInfoMapper;
@@ -9,6 +10,8 @@ import com.zhsj.business.manual.dto.ManualDto;
 import com.zhsj.business.manual.dto.ManualQueryDto;
 import com.zhsj.business.manual.mapper.ManualMapper;
 import com.zhsj.business.manual.service.ManualService;
+import com.zhsj.business.student.domain.StudentPO;
+import com.zhsj.business.student.mapper.StudentMapper;
 import com.zhsj.common.core.domain.AjaxResult;
 import com.zhsj.common.exception.base.BaseException;
 import com.zhsj.common.utils.DateUtils;
@@ -28,6 +31,9 @@ public class ManualServiceImpl extends ServiceImpl<ManualMapper, ManualPO> imple
 
     @Resource
     private ClassInfoMapper classInfoMapper;
+
+    @Resource
+    private StudentMapper studentMapper;
     /**
      * @description ListManualInfo
      * @date 2022/3/26 19:46
@@ -115,6 +121,11 @@ public class ManualServiceImpl extends ServiceImpl<ManualMapper, ManualPO> imple
         GroupAndClassNameDto groupAndClassName = manualMapper.getStudentGroup(sno);
         HashMap<String, Object> map = new HashMap<>();
         map.put("groupAndClassName", groupAndClassName);
+        QueryWrapper<StudentPO> studentPOQueryWrapper = new QueryWrapper<>();
+        studentPOQueryWrapper.eq("student_no", sno);
+        StudentPO studentPO = studentMapper.selectOne(studentPOQueryWrapper);
+        String studentName = studentPO.getStudentName();
+        map.put("studentName", studentName);
         return map;
     }
 

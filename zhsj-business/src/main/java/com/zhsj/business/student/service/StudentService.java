@@ -31,4 +31,6 @@ public interface StudentService extends IService<StudentPO> {
      */
     void importTemplate(HttpServletResponse response);
 
+    void deleteStudent(StudentQueryDto dto);
+
 }

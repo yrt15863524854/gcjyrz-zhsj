@@ -114,4 +114,13 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, StudentPO> im
         }
     }
 
+    @Override
+    public void deleteStudent(StudentQueryDto dto) {
+        for (Integer student : dto.getIds()) {
+            QueryWrapper<StudentPO> studentPOQueryWrapper = new QueryWrapper<>();
+            studentPOQueryWrapper.eq("id", student);
+            studentMapper.delete(studentPOQueryWrapper);
+        }
+    }
+
 }

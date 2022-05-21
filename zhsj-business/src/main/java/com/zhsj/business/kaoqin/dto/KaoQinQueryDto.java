@@ -12,4 +12,5 @@ public class KaoQinQueryDto {
     private Date endTime;
     private String classCode;
     private Integer status;
+    private String teacherCode;
 }

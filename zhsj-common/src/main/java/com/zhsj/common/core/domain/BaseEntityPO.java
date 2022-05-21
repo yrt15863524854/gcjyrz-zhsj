@@ -81,4 +81,14 @@ public class BaseEntityPO implements Serializable {
                 ", updateTime=" + updateTime +
                 '}';
     }
+
+    public BaseEntityPO(String createBy, Date createTime, String updateBy, Date updateTime) {
+        this.createBy = createBy;
+        this.createTime = createTime;
+        this.updateBy = updateBy;
+        this.updateTime = updateTime;
+    }
+
+    public BaseEntityPO() {
+    }
 }

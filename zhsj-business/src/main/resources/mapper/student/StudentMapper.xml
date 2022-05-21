@@ -36,6 +36,7 @@
             <if test="studentName != null  and studentName != ''"> and student_name like concat('%', #{studentName}, '%')</if>
             <if test="studentNo != null "> and student_no = #{studentNo}</if>
             <if test="studentGroup != null "> and student_group = #{studentGroup}</if>
+            <if test="classCode != null">and student_class = #{classCode}</if>
         </where>
         order by student_no asc
     </select>

@@ -14,4 +14,6 @@ public class ScoreQueryDto {
     private String studentName;
     private Integer studentNo;
     private Integer studentGroup;
+    private String classCode;
+    private String teacherCode;
 }

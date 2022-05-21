@@ -17,4 +17,6 @@ public class PointDto {
     private String pointCode;
     private String pointName;
     private BigDecimal pointRatio;
+    private String pointAttribute;
+    private String pointTarget;
 }

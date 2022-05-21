@@ -22,4 +22,5 @@ public class PointDetailDto {
     private String studentScore;
     private String studentGroup;
     private String studentClass;
+    private long count;
 }

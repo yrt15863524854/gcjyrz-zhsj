@@ -2,12 +2,26 @@ package com.zhsj.business.student.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zhsj.business.kaoqin.domain.ClassInfoPO;
+import com.zhsj.business.kaoqin.domain.KaoQinPO;
 import com.zhsj.business.kaoqin.mapper.ClassInfoMapper;
+import com.zhsj.business.kaoqin.mapper.KaoQinMapper;
+import com.zhsj.business.manual.domain.ManualPO;
+import com.zhsj.business.manual.domain.TopicDetailPO;
+import com.zhsj.business.manual.mapper.ManualMapper;
+import com.zhsj.business.manual.mapper.TopicDetailMapper;
+import com.zhsj.business.point.domain.PointDetailPO;
+import com.zhsj.business.point.domain.ScorePO;
+import com.zhsj.business.point.mapper.PointDetailMapper;
+import com.zhsj.business.point.mapper.ScoreMapper;
+import com.zhsj.business.rate.domain.RatePO;
+import com.zhsj.business.rate.mapper.RateMapper;
 import com.zhsj.business.student.domain.StudentPO;
 import com.zhsj.business.student.dto.StudentDto;
 import com.zhsj.business.student.dto.StudentQueryDto;
 import com.zhsj.business.student.mapper.StudentMapper;
 import com.zhsj.business.student.service.StudentService;
+import com.zhsj.business.uploadDown.domain.UploadPO;
+import com.zhsj.business.uploadDown.mapper.UploadMapper;
 import com.zhsj.common.config.ZhsjConfig;
 import com.zhsj.common.core.controller.BaseController;
 import com.zhsj.common.core.domain.AjaxResult;
@@ -18,9 +32,12 @@ import com.zhsj.common.utils.DateUtils;
 import com.zhsj.common.utils.ImportUtils;
 import com.zhsj.common.utils.SecurityUtils;
 import com.zhsj.common.utils.StringUtils;
+import com.zhsj.common.utils.uuid.IdUtils;
 import com.zhsj.system.domain.SysUserRole;
 import com.zhsj.system.domain.UserRolePO;
+import com.zhsj.system.mapper.SysRoleMapper;
 import com.zhsj.system.mapper.SysUserMapper;
+import com.zhsj.system.mapper.SysUserRoleMapper;
 import com.zhsj.system.service.ISysRoleService;
 import com.zhsj.system.service.ISysUserService;
 import jdk.nashorn.internal.objects.Global;
@@ -56,6 +73,24 @@ public class StudentController extends BaseController {
     private ClassInfoMapper classInfoMapper;
     @Resource
     private ISysRoleService iSysRoleService;
+    @Resource
+    private SysUserMapper sysUserMapper;
+    @Resource
+    private SysUserRoleMapper sysUserRoleMapper;
+    @Resource
+    private ScoreMapper scoreMapper;
+    @Resource
+    private PointDetailMapper pointDetailMapper;
+    @Resource
+    private ManualMapper manualMapper;
+    @Resource
+    private TopicDetailMapper topicDetailMapper;
+    @Resource
+    private UploadMapper uploadMapper;
+    @Resource
+    private KaoQinMapper kaoQinMapper;
+    @Resource
+    private RateMapper rateMapper;
     @GetMapping("/get")
     public TableDataInfo get(StudentQueryDto studentQueryDto){
         startPage();
@@ -128,6 +163,88 @@ public class StudentController extends BaseController {
         String message = importVendor(list);
         return AjaxResult.success(message);
     }
+    @PostMapping("/deleteStudent")
+    public void deleteStudent(@RequestBody StudentQueryDto dto){
+        for (Integer student : dto.getIds()) {
+            StudentPO byId = studentService.getById(student);
+            String studentNo = byId.getStudentNo();
+            Long s = new Long(studentNo);
+            //删除学生用户
+            sysUserMapper.deleteUserByUserId(s);
+            //删除学生角色
+            sysUserRoleMapper.deleteUserRoleByUserId(s);
+            //删除学生总分
+            QueryWrapper<ScorePO> scorePOQueryWrapper = new QueryWrapper<>();
+            scorePOQueryWrapper.eq("student_no", studentNo);
+            scoreMapper.delete(scorePOQueryWrapper);
+            //删除评分点信息
+            QueryWrapper<PointDetailPO> pointDetailPOQueryWrapper = new QueryWrapper<>();
+            pointDetailPOQueryWrapper.eq("student_no", studentNo);
+            pointDetailMapper.delete(pointDetailPOQueryWrapper);
+            //删除任务书信息
+            QueryWrapper<ManualPO> manualPOQueryWrapper = new QueryWrapper<>();
+            manualPOQueryWrapper.eq("create_by", studentNo);
+            manualMapper.delete(manualPOQueryWrapper);
+            //删除题目详细信息
+            QueryWrapper<TopicDetailPO> topicDetailPOQueryWrapper = new QueryWrapper<>();
+            topicDetailPOQueryWrapper.eq("student_no", studentNo);
+            topicDetailMapper.delete(topicDetailPOQueryWrapper);
+            //删除上传信息
+            QueryWrapper<UploadPO> uploadPOQueryWrapper = new QueryWrapper<>();
+            uploadPOQueryWrapper.eq("student_no", studentNo);
+            uploadMapper.delete(uploadPOQueryWrapper);
+            //删除考勤信息
+            QueryWrapper<KaoQinPO> kaoQinPOQueryWrapper = new QueryWrapper<>();
+            kaoQinPOQueryWrapper.eq("student_no", studentNo);
+            kaoQinMapper.delete(kaoQinPOQueryWrapper);
+            //删除问卷信息
+            QueryWrapper<RatePO> ratePOQueryWrapper = new QueryWrapper<>();
+            ratePOQueryWrapper.eq("student_no", studentNo);
+            rateMapper.delete(ratePOQueryWrapper);
+        }
+        studentService.deleteStudent(dto);
+    }
+    @GetMapping("/deleteByStudentNo/{studentNo}")
+    public void deleteByStudentNo(@PathVariable String studentNo) {
+        QueryWrapper<StudentPO> studentPOQueryWrapper = new QueryWrapper<>();
+        studentPOQueryWrapper.eq("student_no", studentNo);
+        studentService.remove(studentPOQueryWrapper);
+        Long s = new Long(studentNo);
+        //删除学生用户
+        sysUserMapper.deleteUserByUserId(s);
+        //删除学生角色
+        sysUserRoleMapper.deleteUserRoleByUserId(s);
+        //删除学生总分
+        QueryWrapper<ScorePO> scorePOQueryWrapper = new QueryWrapper<>();
+        scorePOQueryWrapper.eq("student_no", studentNo);
+        scoreMapper.delete(scorePOQueryWrapper);
+        //删除各个评分点信息
+        QueryWrapper<PointDetailPO> pointDetailPOQueryWrapper = new QueryWrapper<>();
+        pointDetailPOQueryWrapper.eq("student_no", studentNo);
+        pointDetailMapper.delete(pointDetailPOQueryWrapper);
+        //删除任务书信息
+        QueryWrapper<ManualPO> manualPOQueryWrapper = new QueryWrapper<>();
+        manualPOQueryWrapper.eq("create_by", studentNo);
+        manualMapper.delete(manualPOQueryWrapper);
+        //删除题目详细信息
+        QueryWrapper<TopicDetailPO> topicDetailPOQueryWrapper = new QueryWrapper<>();
+        topicDetailPOQueryWrapper.eq("student_no", studentNo);
+        topicDetailMapper.delete(topicDetailPOQueryWrapper);
+        //删除上传信息
+        QueryWrapper<UploadPO> uploadPOQueryWrapper = new QueryWrapper<>();
+        uploadPOQueryWrapper.eq("student_no", studentNo);
+        uploadMapper.delete(uploadPOQueryWrapper);
+        //删除考勤信息
+        QueryWrapper<KaoQinPO> kaoQinPOQueryWrapper = new QueryWrapper<>();
+        kaoQinPOQueryWrapper.eq("student_no", studentNo);
+        kaoQinMapper.delete(kaoQinPOQueryWrapper);
+        //删除问卷信息
+        QueryWrapper<RatePO> ratePOQueryWrapper = new QueryWrapper<>();
+        ratePOQueryWrapper.eq("student_no", studentNo);
+        rateMapper.delete(ratePOQueryWrapper);
+    }
+
+
     /**
      * 学生信息
      */
@@ -150,21 +267,21 @@ public class StudentController extends BaseController {
             if (currentRow == null) {
                 continue;
             }
-            //学生编码
-            String studentCode = ImportUtils.getJavaValue(currentRow.getCell(0)).toString();
-            if (studentCode.isEmpty()) {
-                throw new BaseException("第" + (i + 1) + "学生编码不能为空");
-                //throw new RuntimeException("第" + (i + 1) + "学生编码不能为空");
-            } else {
-                StudentPO code = studentMapper.selectOne(new QueryWrapper<StudentPO>().eq("student_code", studentCode));
-                if (Objects.nonNull(code)) {
-                    throw new BaseException("第" + (i + 1) + "行的学生编码信息已存在");
-                    //throw new RuntimeException("第" + (i + 1) + "行的学生编码信息已存在");
-                }
-                detail.setStudentCode(studentCode);
-            }
+//            //学生编码
+//            String studentCode = ImportUtils.getJavaValue(currentRow.getCell(0)).toString();
+//            if (studentCode.isEmpty()) {
+//                throw new BaseException("第" + (i + 1) + "学生编码不能为空");
+//                //throw new RuntimeException("第" + (i + 1) + "学生编码不能为空");
+//            } else {
+//                StudentPO code = studentMapper.selectOne(new QueryWrapper<StudentPO>().eq("student_code", studentCode));
+//                if (Objects.nonNull(code)) {
+//                    throw new BaseException("第" + (i + 1) + "行的学生编码信息已存在");
+//                    //throw new RuntimeException("第" + (i + 1) + "行的学生编码信息已存在");
+//                }
+//                detail.setStudentCode(studentCode);
+//            }
             //学生学号
-            String studentNo = ImportUtils.getJavaValue(currentRow.getCell(1)).toString();
+            String studentNo = ImportUtils.getJavaValue(currentRow.getCell(0)).toString();
             if (studentNo.isEmpty()) {
                 throw new BaseException("第" + (i + 1) + "学生学号不能为空");
                 //throw new RuntimeException("第" + (i + 1) + "学生学号不能为空");
@@ -181,7 +298,7 @@ public class StudentController extends BaseController {
                 detail.setStudentNo(studentNo);
             }
             //学生姓名
-            String studentName = ImportUtils.getJavaValue(currentRow.getCell(2)).toString();
+            String studentName = ImportUtils.getJavaValue(currentRow.getCell(1)).toString();
             if (studentName.isEmpty()) {
                 throw new BaseException("第" + (i + 1) + "学生姓名不能为空");
                 //throw new RuntimeException("第" + (i + 1) + "学生姓名不能为空");
@@ -190,32 +307,33 @@ public class StudentController extends BaseController {
                 detail.setStudentName(studentName);
             }
             //学生班级
-            String studentClass = ImportUtils.getJavaValue(currentRow.getCell(3)).toString();
+            String studentClass = ImportUtils.getJavaValue(currentRow.getCell(2)).toString();
             if (studentClass.isEmpty()) {
                 throw new BaseException("第" + (i + 1) + "学生班级不能为空");
                 //throw new RuntimeException("第" + (i + 1) + "学生班级不能为空");
             } else {
-                ClassInfoPO code = classInfoMapper.selectOne(new QueryWrapper<ClassInfoPO>().eq("class_code", studentClass));
-                if (Objects.isNull(code)) {
+                ClassInfoPO classInfoPO = classInfoMapper.selectOne(new QueryWrapper<ClassInfoPO>().eq("class_name", studentClass));
+                if (Objects.isNull(classInfoPO)) {
                     throw new BaseException("第" + (i + 1) + "行的班级信息未找到");
                     //throw new RuntimeException("第" + (i + 1) + "行的班级信息未找到");
                 }
-                detail.setStudentClass(studentClass);
+                detail.setStudentClass(classInfoPO.getClassCode());
             }
             //学生组号
-            if (Objects.isNull(currentRow.getCell(4))){
+            if (Objects.isNull(currentRow.getCell(3))){
                 detail.setStudentGroup(null);
             } else {
-                String group = ImportUtils.getJavaValue(currentRow.getCell(4)).toString();
+                String group = ImportUtils.getJavaValue(currentRow.getCell(3)).toString();
                 detail.setStudentGroup(Integer.parseInt(group));
             }
-            //是否为组长
-            if (Objects.isNull(currentRow.getCell(5))){
-                detail.setLeader(null);
-            } else {
-                String lead = ImportUtils.getJavaValue(currentRow.getCell(5)).toString();
-                detail.setLeader(Integer.parseInt(lead));
-            }
+//            //是否为组长
+//            if (Objects.isNull(currentRow.getCell(5))){
+//                detail.setLeader(null);
+//            } else {
+//                String lead = ImportUtils.getJavaValue(currentRow.getCell(5)).toString();
+//                detail.setLeader(Integer.parseInt(lead));
+//            }
+            detail.setStudentCode(IdUtils.fastSimpleUUID());
             detail.setCreateBy(SecurityUtils.getUsername());
             detail.setCreateTime(DateUtils.getNowDate());
             user.setCreateBy(getUsername());
@@ -246,4 +364,5 @@ public class StudentController extends BaseController {
         successMsg.insert(0, "数据已全部导入共" + detailList.size() + "条");
         return successMsg.toString();
     }
+
 }

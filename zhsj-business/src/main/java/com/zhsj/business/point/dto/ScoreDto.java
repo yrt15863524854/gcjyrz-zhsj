@@ -17,4 +17,5 @@ public class ScoreDto {
     private String className;
     private String studentGroup;
     private String studentScore;
+    private Integer studentKaoqin;
 }

@@ -4,27 +4,28 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhsj.business.manual.mapper.TopicDetailMapper">
     <select id="getTopicDetail" resultType="com.zhsj.business.manual.dto.TopicDetailDto" parameterType="com.zhsj.business.manual.dto.TopicDetailQueryDto">
-        select id, html, text, student_group
+        select id, html, text, student_group, student_no
         from business_topic_detail
         <where>
             <if test="dto != null and dto != ''">
                 <if test="dto.id != null and dto.id != ''">and id = #{dto.id}</if>
                 <if test="dto.studentGroup != null and dto.studentGroup != ''">and student_group = #{dto.studentGroup}</if>
                 <if test="dto.classCode != null and dto.classCode != ''">and class_code = #{dto.classCode}</if>
+                <if test="dto.studentNo != null and dto.studentNo != ''">and student_no = #{dto.studentNo}</if>
             </if>
         </where>
     </select>
     <insert id="insertTopicDetail" parameterType="com.zhsj.business.manual.domain.TopicDetailPO">
         insert business_topic_detail
         <trim prefix="(" suffixOverrides="," suffix=")">
-            id,student_group,class_code,
+            id,student_group,class_code,student_no,
             <if test="PO.html != null and PO.html != ''">html,</if>
             <if test="PO.text != null and PO.text != ''">text,</if>
             <if test="PO.createBy != null and PO.createBy != ''">create_by,</if>
             <if test="PO.createTime != null">create_time,</if>
         </trim>
         <trim prefix="values (" suffixOverrides="," suffix=")">
-            #{PO.id},#{PO.studentGroup},#{PO.classCode},
+            #{PO.id},#{PO.studentGroup},#{PO.classCode},#{PO.studentNo},
             <if test="PO.html != null and PO.html != ''">
                 #{PO.html},
             </if>

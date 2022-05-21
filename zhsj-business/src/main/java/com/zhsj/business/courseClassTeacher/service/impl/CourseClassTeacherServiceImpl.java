@@ -1,5 +1,6 @@
 package com.zhsj.business.courseClassTeacher.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zhsj.business.courseClassTeacher.domain.CourseClassTeacherPO;
 import com.zhsj.business.courseClassTeacher.dto.CourseClassTeacherDto;
@@ -33,7 +34,13 @@ public class CourseClassTeacherServiceImpl extends ServiceImpl<CourseClassTeache
     public AjaxResult entryInformation(CourseClassTeacherDto courseClassTeacherDto) {
         CourseClassTeacherPO po = new CourseClassTeacherPO();
         BeanUtils.copyProperties(courseClassTeacherDto, po);
+        QueryWrapper<CourseClassTeacherPO> wrapper = new QueryWrapper<>();
         if (Objects.isNull(po.getId())) {
+            wrapper.and(p -> p.eq("course_code", po.getCourseCode()).eq("teacher_code", po.getTeacherCode()).eq("class_code", po.getClassCode()));
+            List<CourseClassTeacherPO> list = courseClassTeacherMapper.selectList(wrapper);
+            if (list.size() > 0) {
+                return AjaxResult.error("该条信息已存在");
+            }
             po.setCreateBy(SecurityUtils.getLoginUser().getUsername());
             po.setCreateTime(DateUtils.getNowDate());
             int result = courseClassTeacherMapper.entryInformation(po);
@@ -42,6 +49,11 @@ public class CourseClassTeacherServiceImpl extends ServiceImpl<CourseClassTeache
             }
             return AjaxResult.success("添加成功");
         } else {
+            wrapper.and(p -> p.ne("id", po.getId()).eq("course_code", po.getCourseCode()).eq("teacher_code", po.getTeacherCode()).eq("class_code", po.getClassCode()));
+            List<CourseClassTeacherPO> list = courseClassTeacherMapper.selectList(wrapper);
+            if (list.size() > 0) {
+                return AjaxResult.error("该条信息已存在");
+            }
             po.setUpdateBy(SecurityUtils.getLoginUser().getUsername());
             po.setUpdateTime(DateUtils.getNowDate());
             int result = courseClassTeacherMapper.modifyInformation(po);

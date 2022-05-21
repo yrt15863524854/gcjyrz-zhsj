@@ -14,4 +14,5 @@ public class TopicDetailQueryDto {
     private Long id;
     private Integer studentGroup;
     private String classCode;
+    private String studentNo;
 }

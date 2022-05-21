@@ -54,11 +54,14 @@ public class UploadDownloadController {
         wrapper.eq("student_no", username);
         StudentPO student = studentService.getOne(wrapper);
         String studentGroup = student.getStudentGroup() + "";
+        String studentName = student.getStudentName();
         QueryWrapper<ClassInfoPO> classInfoPOQueryWrapper = new QueryWrapper<>();
         classInfoPOQueryWrapper.eq("class_code", student.getStudentClass());
         ClassInfoPO classInfo = classInfoService.getOne(classInfoPOQueryWrapper);
         String className = classInfo.getClassName();
-        String courseDesign = "课程设计";
+        SimpleDateFormat format = new SimpleDateFormat("yyyy");
+        String year = format.format(new Date());
+        String courseDesign = year + "课程设计";
         String realPath = path + "/" + courseDesign + "/";
         File files = new File(realPath);
         if (!files.exists()) {
@@ -82,7 +85,7 @@ public class UploadDownloadController {
             map.put("studentGroup", studentGroup);
             String extension = FilenameUtils.getExtension(originalFilename);
             if ("zip".equalsIgnoreCase(extension)) {
-                originalFilename = className + studentGroup + "组"+ "_" + "课程设计" + ".zip";
+                originalFilename = className + "_" + username + "_" + studentName + "_" + studentGroup + "组"+ "_" + "课程设计" + ".zip";
                 try {
                     file.transferTo(new File(realPath, originalFilename));
                     map.put("info", "文件上传成功");
@@ -103,13 +106,14 @@ public class UploadDownloadController {
         QueryWrapper<StudentPO> wrapper = new QueryWrapper<>();
         wrapper.eq("student_no", studentNo);
         StudentPO student = studentService.getOne(wrapper);
+        String studentName = student.getStudentName();
         String studentGroup = student.getStudentGroup() + "";
         QueryWrapper<ClassInfoPO> classInfoPOQueryWrapper = new QueryWrapper<>();
         classInfoPOQueryWrapper.eq("class_code", student.getStudentClass());
         ClassInfoPO classInfo = classInfoService.getOne(classInfoPOQueryWrapper);
         String className = classInfo.getClassName();
         try {
-            InputStream inputStream = new FileInputStream(genPath() + className + studentGroup + "组"+ "_" + "课程设计" + ".zip");
+            InputStream inputStream = new FileInputStream(genPath() + className + "_" + studentNo + "_" +studentName + "_" + studentGroup + "组"+ "_" + "课程设计" + ".zip");
             //强制下载打不开
             response.setContentType("application/force-download");
             ServletOutputStream out = response.getOutputStream();
@@ -138,8 +142,10 @@ public class UploadDownloadController {
     }
 
     private static String genPath() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy");
+        String year = format.format(new Date());
         String path = ZhsjConfig.getProfile();
-        String courseDesign = "课程设计";
+        String courseDesign = year + "课程设计";
         return path + "/" + courseDesign + "/";
     }
 }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhsj.business.rate.mapper.RateMapper">
+    <select id="listRate" resultType="com.zhsj.business.rate.dto.RateDto" parameterType="com.zhsj.business.rate.dto.RateQueryDto">
+        SELECT br.student_no,bs.student_name,bc.class_name,br.rate_status
+        FROM business_rate br
+        LEFT JOIN business_class bc
+        ON br.class_code = bc.class_code
+        LEFT JOIN business_student bs
+        ON br.student_no = bs.student_no
+        <where>
+            <if test="dto.rateStatus != null">and br.rate_status = #{dto.rateStatus}</if>
+            <if test="dto.classCode != null">and br.class_code = #{dto.classCode}</if>
+        </where>
+    </select>
+</mapper>

@@ -12,9 +12,12 @@
         <result column="feedback" property="feedback"/>
         <result column="manual_code" property="manualCode"/>
         <result column="class_code" property="classCode"/>
+        <result column="student_no" property="studentNo"/>
+        <result column="functional_module" property="functionalModule"/>
     </resultMap>
     <select id="listManualInfo" resultMap="manualResult" parameterType="com.zhsj.business.manual.dto.ManualQueryDto">
-        select bm.id,bm.manual_code,bm.manual_name,bm.student_group,bm.feedback,bm.is_audit,bc.class_name as className,bc2.course_name as courseName, bm.class_code from business_manual bm left join business_class bc
+        select bm.id,bm.manual_code,bm.manual_name,bm.student_group,bm.feedback,bm.is_audit,bc.class_name as className,bc2.course_name as courseName, bm.class_code, bm.student_no, bm.functional_module
+        from business_manual bm left join business_class bc
         on bc.class_code = bm.class_code left join business_course bc2 on bc2 .course_code = bm .course_code
         <where>
             bm.course_code =
@@ -28,7 +31,7 @@
         insert into business_manual
         <trim prefix="(" suffixOverrides="," suffix=")">
             <if test="PO != null and PO != ''">
-                id, manual_code,
+                id, manual_code,student_no,functional_module,
                 <if test="PO.manualName != null and PO.manualName != ''">
                     manual_name,
                 </if>
@@ -56,7 +59,7 @@
             </if>
         </trim>
         <trim prefix="values (" suffixOverrides="," suffix=")">
-            #{PO.id},#{PO.manualCode},
+            #{PO.id},#{PO.manualCode},#{PO.studentNo},#{PO.functionalModule},
             <if test="PO.manualName != null and PO.manualName != ''">
                 #{PO.manualName},
             </if>
@@ -104,6 +107,9 @@
             <if test="PO.classCode != null and PO.classCode != ''">
                 class_code = #{PO.classCode},
             </if>
+            <if test="PO.functionalModule != null and PO.functionalModule != ''">
+                functional_module = #{PO.functionalModule},
+            </if>
             <if test="PO.updateBy != null and PO.updateBy != ''">
                 update_by = #{PO.updateBy},
             </if>
@@ -124,24 +130,32 @@
         where student_no = #{sno}
     </select>
     <select id="getManualInfoBySg" parameterType="com.zhsj.business.manual.dto.ManualQueryDto" resultType="com.zhsj.business.manual.dto.ManualDto">
-        select bm.id,bm.manual_code,bm.manual_name,bm.student_group,bm.feedback,bm.is_audit,bc.class_name as className,bc2.course_name as courseName, bm.course_code
+        select bm.id,bm.manual_code,bm.manual_name,bm.student_group,bm.feedback,bm.is_audit,bc.class_name as className,bc2.course_name as courseName, bm.course_code, bm.student_no, bm.functional_module, bs.student_name
         from business_manual bm
         left join business_class bc
         on bc.class_code = (select student_class from business_student where student_no	= #{dto.studentNo})
         left join business_course bc2
         on bc2.course_code = bm.course_code
-        where bm.student_group = #{dto.studentGroup} and bm.class_code = #{dto.classCode}
+        left join business_student bs
+        on bs.student_no = bm.student_no
+        where  bm.student_no = #{dto.studentNo}
     </select>
     <select id="getClassAndCourseByTeacher" parameterType="string" resultType="com.zhsj.business.courseClassTeacher.dto.CourseClassDto">
         select * from business_course_teacher where teacher_code = #{teacherCode}
     </select>
     <select id="getManualByCAndC" resultType="com.zhsj.business.manual.dto.ManualDto" parameterType="com.zhsj.business.courseClassTeacher.dto.CourseClassDto">
-        select bm.id,bm.manual_code,bm.manual_name,bm.student_group,bm.feedback,bm.is_audit,bc.class_name as className,bc2.course_name as courseName, bm.class_code
+        select bm.id,bm.manual_code,bm.manual_name,bm.student_group,bm.feedback,bm.is_audit,bc.class_name as className,bc2.course_name as courseName, bm.class_code, bm.student_no, bm.functional_module, bs.student_name
         from business_manual bm
         left join business_class bc
         on bc.class_code = bm.class_code
         left join business_course bc2
         on bc2 .course_code = bm .course_code
+        left join business_student bs
+        on bs.student_no = bm.student_no
         where bm.class_code = #{dto.classCode} and bm.course_code = #{dto.courseCode}
+        <if test="dto.studentNo != null and dto.studentNo != ''">
+            and bm.student_no = #{dto.studentNo}
+        </if>
+
     </select>
 </mapper>

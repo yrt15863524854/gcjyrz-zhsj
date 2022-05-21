@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhsj.business.point.mapper.ScoreMapper">
     <select id="getStudentScore" parameterType="com.zhsj.business.point.dto.ScoreQueryDto" resultType="com.zhsj.business.point.dto.ScoreDto">
-        select bs.student_no, bs.student_name, bs.student_group, bc.class_name, bs2.student_score
+        select bs.id, bs.student_no, bs.student_name, bs.student_group,bs.student_kaoqin, bc.class_name, bs2.student_score
         from business_student bs
         left join business_class bc
         on bs.student_class  = bc.class_code
@@ -14,6 +14,7 @@
             <if test="dto.studentName != null  and dto.studentName != ''"> and bs.student_name like concat('%', #{dto.studentName}, '%')</if>
             <if test="dto.studentNo != null "> and bs.student_no = #{dto.studentNo}</if>
             <if test="dto.studentGroup != null "> and bs.student_group = #{dto.studentGroup}</if>
+            <if test="dto.classCode != null and dto.classCode != ''">and bs.student_class = #{dto.classCode}</if>
         </where>
         order by bs.student_no asc
     </select>

@@ -5,11 +5,11 @@
 <mapper namespace="com.zhsj.business.point.mapper.PointMapper">
     <insert id="insertPoint" parameterType="com.zhsj.business.point.domain.PointPO">
         insert business_point
-        (id, point_code, point_name, point_ratio, create_by, create_time)
-        values (#{PO.id}, #{PO.pointCode}, #{PO.pointName},#{PO.pointRatio}, #{PO.createBy}, #{PO.createTime})
+        (id, point_code, point_name, point_ratio, point_attribute, point_target, create_by, create_time)
+        values (#{PO.id}, #{PO.pointCode}, #{PO.pointName},#{PO.pointRatio},#{PO.pointAttribute},#{PO.pointTarget}, #{PO.createBy}, #{PO.createTime})
     </insert>
     <insert id="updatePoint" parameterType="com.zhsj.business.point.domain.PointPO">
-        update business_point set point_name = #{PO.pointName},point_ratio = #{PO.pointRatio}
+        update business_point set point_name = #{PO.pointName},point_ratio = #{PO.pointRatio},point_attribute = #{PO.pointAttribute},point_target = #{PO.pointTarget},update_by = #{PO.updateBy}, update_time = #{PO.updateTime}
         where id = #{PO.id}
     </insert>
 </mapper>

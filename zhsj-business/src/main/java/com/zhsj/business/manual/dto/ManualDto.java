@@ -36,6 +36,8 @@ public class ManualDto {
      * 学生组号
      */
     private String studentGroup;
+    //学生学号
+    private String studentNo;
     /**
      * 教师反馈意见
      */
@@ -44,4 +46,8 @@ public class ManualDto {
      * 是否审核
      */
     private Integer isAudit;
+    //功能模块
+    private String functionalModule;
+    //学生姓名
+    private String studentName;
 }

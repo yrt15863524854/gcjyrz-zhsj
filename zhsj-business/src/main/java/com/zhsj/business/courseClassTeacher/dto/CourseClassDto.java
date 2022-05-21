@@ -13,4 +13,5 @@ import lombok.Data;
 public class CourseClassDto {
     private String classCode;
     private String courseCode;
+    private String studentNo;
 }

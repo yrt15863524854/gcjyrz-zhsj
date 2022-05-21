@@ -3,7 +3,9 @@ package com.zhsj.business.point.controller;
 import com.baomidou.mybatisplus.core.conditions.query.Query;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zhsj.business.kaoqin.domain.ClassInfoPO;
+import com.zhsj.business.kaoqin.domain.KaoQinPO;
 import com.zhsj.business.kaoqin.service.ClassInfoService;
+import com.zhsj.business.kaoqin.service.KaoQinService;
 import com.zhsj.business.point.domain.PointDetailPO;
 import com.zhsj.business.point.domain.PointPO;
 import com.zhsj.business.point.dto.PointDetailDto;
@@ -40,6 +42,8 @@ public class PointDetailController extends BaseController {
     private PointService pointService;
     @Resource
     private ClassInfoService classInfoService;
+    @Resource
+    private KaoQinService kaoQinService;
     @PostMapping("/selectDetailList")
     public List<PointDetailDto> selectDetailList(@RequestBody PointDetailQueryDto queryDto) {
         PointDetailDto pointDetailDto = new PointDetailDto();
@@ -70,6 +74,11 @@ public class PointDetailController extends BaseController {
             dto.setPointRatio(one.getPointRatio().toString());
             dto.setStudentGroup(student.getStudentGroup().toString());
             dto.setStudentClass(classInfo.getClassName());
+            QueryWrapper<KaoQinPO> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("student_no", po.getStudentNo());
+            List<KaoQinPO> list = kaoQinService.list(queryWrapper);
+            long count = list.stream().filter(p -> p.getKaoqinStatus() != 3).count();
+            dto.setCount(count);
             pointDetailDtoList.add(dto);
         }
         return pointDetailDtoList;

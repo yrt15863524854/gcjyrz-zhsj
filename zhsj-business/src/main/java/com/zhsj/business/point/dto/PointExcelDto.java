@@ -17,4 +17,5 @@ public class PointExcelDto {
     private String studentName;
     private String pointName;
     private String pointScore;
+    private String studentScore;
 }
