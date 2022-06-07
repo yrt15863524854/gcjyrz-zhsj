@@ -502,7 +502,7 @@ public class PointDetailServiceImpl extends ServiceImpl<PointDetailMapper, Point
         SXSSFSheet sheet2 = workbook.createSheet("分值分布");
         SXSSFSheet sheet3 = workbook.createSheet("得分情况");
         SXSSFSheet sheet4 = workbook.createSheet("达成度");
-        SXSSFSheet sheet5 = workbook.createSheet("评价达成率");
+
         CellStyle cellStyle = workbook.createCellStyle();
         //垂直居中
         cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);

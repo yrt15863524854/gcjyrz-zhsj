@@ -44,6 +44,8 @@
             <if test="dto.classCode != null and dto.classCode != ''">and bk.class_code = #{dto.classCode}</if>
             <if test="dto.studentNo != null and dto.studentNo != ''">and bk.student_no like concat('%', #{dto.studentNo}, '%')</if>
             <if test="dto.kaoqinStudent != null and dto.kaoqinStudent != ''">and bk.kaoqin_student like concat('%', #{dto.kaoqinStudent}, '%')</if>
+            <if test="dto.startTime != null">and bk.create_time &gt;= #{dto.startTime}</if>
+            <if test="dto.endTime != null">and bk.create_time &lt;= #{dto.endTime}</if>
             <if test="dto.startTime != null and dto.endTime != null">and bk.create_time &gt;= #{dto.startTime} and bk.create_time &lt;= #{dto.endTime}</if>
             <if test="dto.status != null and dto.status != ''">and bk.kaoqin_status = #{dto.status}</if>
         </where>
