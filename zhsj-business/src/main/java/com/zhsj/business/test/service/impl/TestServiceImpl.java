@@ -1,5 +1,6 @@
 package com.zhsj.business.test.service.impl;
 
+import com.zhsj.business.test.domain.PaperParameter;
 import com.zhsj.business.test.domain.Test;
 import com.zhsj.business.test.mapper.TestMapper;
 import com.zhsj.business.test.service.TestService;
@@ -15,5 +16,10 @@ public class TestServiceImpl implements TestService {
     @Override
     public List<Test> getAllTest() {
         return testMapper.getAllTest();
+    }
+
+    @Override
+    public List<Test> dividePaper(PaperParameter paperParameter) {
+        return testMapper.dividePaper(paperParameter);
     }
 }

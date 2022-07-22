@@ -6,4 +6,8 @@
     <select id="getAllTest" resultType="Test">
         select * from test
     </select>
+    <select id="dividePaper" parameterType="com.zhsj.business.test.domain.PaperParameter" resultType="Test">
+        select * from test
+        limit #{dto.pageNum},#{dto.pageSize}
+    </select>
 </mapper>
